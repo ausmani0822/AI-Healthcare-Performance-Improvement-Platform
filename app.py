@@ -237,9 +237,9 @@ html, body, [class*="css"] {
 /* ── Full-screen hero ── */
 .synora-hero-fullscreen {
     position: relative;
-    min-height: calc(100vh - var(--nav-height) - 2rem);
+    min-height: calc(100vh - var(--nav-height) - 1rem);
     margin: -1rem -1rem 0 -1rem;
-    padding: 6rem 4rem 5rem 4rem;
+    padding: 7rem 4.5rem 6rem 4.5rem;
     border-radius: 0;
     overflow: hidden;
     display: flex;
@@ -263,48 +263,56 @@ html, body, [class*="css"] {
 .synora-hero-inner {
     position: relative;
     z-index: 2;
-    max-width: 920px;
-    padding-right: 2rem;
+    max-width: 960px;
+    padding-right: 3rem;
 }
 .synora-hero-brand {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.24em;
     text-transform: uppercase;
     color: var(--synora-dim);
-    margin: 0 0 2.75rem 0;
+    margin: 0 0 3.25rem 0;
 }
 .synora-hero-headline {
     font-family: 'DM Sans', sans-serif;
-    font-size: clamp(2.75rem, 5.8vw, 4.75rem);
+    font-size: clamp(3.25rem, 7.5vw, 5.75rem);
     font-weight: 600;
     color: var(--synora-text);
-    margin: 0 0 2.25rem 0;
-    letter-spacing: -0.03em;
-    line-height: 1.02;
-    text-transform: uppercase;
+    margin: 0 0 3rem 0;
+    letter-spacing: -0.035em;
+    line-height: 1.0;
+    text-transform: none;
 }
 .synora-hero-headline span {
     display: block;
 }
+.synora-hero-headline span + span {
+    margin-top: 0.08em;
+}
 .synora-hero-statement {
     font-family: 'DM Sans', sans-serif;
-    font-size: clamp(1.15rem, 2vw, 1.45rem);
+    font-size: clamp(1.35rem, 2.4vw, 1.85rem);
     font-weight: 500;
     color: var(--synora-muted);
-    margin: 0 0 1.5rem 0;
-    letter-spacing: -0.015em;
-    line-height: 1.45;
-    max-width: 540px;
+    margin: 0 0 2.25rem 0;
+    letter-spacing: -0.02em;
+    line-height: 1.35;
+    max-width: 560px;
 }
 .synora-hero-desc {
-    font-size: 0.95rem;
+    font-size: 1rem;
     color: var(--synora-dim);
-    margin: 0;
-    max-width: 480px;
-    line-height: 1.75;
+    margin: 0 0 0.5rem 0;
+    max-width: 520px;
+    line-height: 1.8;
     font-weight: 400;
+}
+
+.synora-hero-actions {
+    margin: -1.5rem 0 3.5rem 0;
+    padding: 0 0.25rem;
 }
 
 /* Operational status strip */
@@ -366,11 +374,6 @@ html, body, [class*="css"] {
     height: 6px;
     border-radius: 50%;
     background: var(--synora-success);
-}
-
-.synora-hero-actions {
-    margin: 0 0 4rem 0;
-    padding: 0 0.25rem;
 }
 
 /* Compact hero for inner pages */
@@ -2232,10 +2235,12 @@ def render_landing_hero():
         '<span>Executive Intelligence</span>'
         '<span>For Healthcare Operations</span>'
         '</h1>'
-        '<p class="synora-hero-statement">Transform operational complexity into executive clarity.</p>'
+        '<p class="synora-hero-statement">'
+        'Transform operational complexity<br>into executive clarity.'
+        '</p>'
         '<p class="synora-hero-desc">'
-        'AI-powered operational intelligence for hospitals, health systems, '
-        'and executive leadership teams.'
+        'Synora continuously monitors operational, financial, and clinical performance '
+        'to help healthcare leaders make faster, better decisions.'
         '</p>'
         '</div></div>'
     )
@@ -2490,8 +2495,8 @@ def render_financial_impact(df: pd.DataFrame, alerts: list[dict]):
 
 def render_page_overview():
     render_landing_hero()
-    render_status_strip()
     render_hero_ctas()
+    render_status_strip()
     df = st.session_state.df
     if df is not None:
         alerts = st.session_state.alerts
