@@ -1,8 +1,9 @@
 """
-AI Healthcare Performance Improvement Platform
-A hospital executive dashboard for KPI analysis and AI-driven insights.
+Synora — AI Copilot for Healthcare Operations
+Hospital executive dashboard for KPI analysis and AI-driven insights.
 """
-
+from typing import Optional
+import re
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -24,10 +25,10 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 # PAGE CONFIGURATION
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="AI Healthcare Performance Improvement Platform",
-    page_icon="🏥",
+    page_title="Synora · AI Copilot for Healthcare Operations",
+    page_icon="⚡",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # ─────────────────────────────────────────────
@@ -36,140 +37,292 @@ st.set_page_config(
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
-/* ── Base & Typography ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
 }
 
-/* Main background */
+/* ── Synora palette ── */
+:root {
+    --synora-midnight: #0B172A;
+    --synora-slate: #1E293B;
+    --synora-cyan: #38BDF8;
+    --synora-bg: #F8FAFC;
+    --synora-card: #FFFFFF;
+    --synora-success: #10B981;
+    --synora-warning: #F59E0B;
+    --synora-critical: #DC2626;
+    --synora-text: #0F172A;
+    --synora-muted: #64748B;
+    --synora-border: #E2E8F0;
+}
+
 .stApp {
-    background-color: #F0F4F8;
+    background-color: #F8FAFC;
+    color: #0F172A;
 }
 
-/* ── Header Banner ── */
-.header-banner {
-    background: linear-gradient(135deg, #0A2342 0%, #1B4F8A 60%, #1A6BAE 100%);
-    padding: 2.5rem 3rem;
+.main .block-container {
+    color: #0F172A;
+    padding-top: 1.5rem;
+    max-width: 1200px;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0B172A 0%, #1E293B 100%);
+    border-right: 1px solid rgba(56, 189, 248, 0.15);
+}
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] label {
+    color: #CBD5E1 !important;
+}
+[data-testid="stSidebar"] .stRadio label {
+    color: #E2E8F0 !important;
+    font-weight: 500;
+}
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
+    background: transparent;
+    border-radius: 8px;
+    padding: 0.35rem 0.5rem;
+    margin: 0.1rem 0;
+}
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
+    background: rgba(56, 189, 248, 0.1);
+}
+
+/* Global markdown on light surfaces */
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stMarkdownContainer"] span {
+    color: #334155;
+}
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3,
+[data-testid="stMarkdownContainer"] h4 {
+    color: #0F172A;
+}
+[data-testid="stMarkdownContainer"] strong,
+[data-testid="stMarkdownContainer"] b {
+    color: #0F172A;
+}
+
+[data-testid="stVerticalBlockBorderWrapper"] {
+    background-color: #FFFFFF;
+    border-color: #E2E8F0 !important;
     border-radius: 12px;
-    margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(11, 23, 42, 0.06);
 }
-.header-banner::before {
-    content: '';
-    position: absolute;
-    top: -40%;
-    right: -10%;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
-    border-radius: 50%;
+[data-testid="stVerticalBlockBorderWrapper"] p,
+[data-testid="stVerticalBlockBorderWrapper"] li,
+[data-testid="stVerticalBlockBorderWrapper"] span {
+    color: #334155 !important;
 }
-.header-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.2rem;
-    font-weight: 600;
+[data-testid="stVerticalBlockBorderWrapper"] h1,
+[data-testid="stVerticalBlockBorderWrapper"] h2,
+[data-testid="stVerticalBlockBorderWrapper"] h3,
+[data-testid="stVerticalBlockBorderWrapper"] h4 {
+    color: #0F172A !important;
+}
+
+/* Sidebar brand */
+.synora-sidebar-brand {
+    padding: 0.5rem 0 1.25rem 0;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+}
+.synora-logo {
+    font-size: 1.65rem;
+    font-weight: 800;
     color: #FFFFFF;
-    margin: 0 0 0.4rem 0;
     letter-spacing: -0.5px;
-    line-height: 1.2;
-}
-.header-subtitle {
-    font-size: 0.95rem;
-    color: #A8C8E8;
     margin: 0;
-    font-weight: 400;
-    letter-spacing: 0.2px;
+    line-height: 1.1;
 }
-.header-tag {
-    display: inline-block;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: #D0E8FF;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    margin-bottom: 0.9rem;
+.synora-logo span {
+    color: #38BDF8;
 }
-
-/* ── Section Headers ── */
-.section-header {
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #1B4F8A;
-    border-left: 3px solid #1B4F8A;
-    padding-left: 0.75rem;
-    margin: 2rem 0 1rem 0;
-}
-
-/* ── Metric Cards ── */
-.metric-card {
-    background: #FFFFFF;
-    border-radius: 10px;
-    padding: 1.4rem 1.2rem;
-    border: 1px solid #E2EAF4;
-    box-shadow: 0 1px 4px rgba(10,35,66,0.06);
-    position: relative;
-    overflow: hidden;
-}
-.metric-card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, #1B4F8A, #1A6BAE);
-    border-radius: 10px 10px 0 0;
-}
-.metric-label {
-    font-size: 0.7rem;
+.synora-sidebar-tag {
+    font-size: 0.68rem;
     font-weight: 600;
     letter-spacing: 1.2px;
     text-transform: uppercase;
-    color: #6B88A8;
-    margin-bottom: 0.5rem;
+    color: #94A3B8;
+    margin-top: 0.35rem;
+}
+
+/* Hero */
+.synora-hero {
+    background: linear-gradient(135deg, #0B172A 0%, #1E293B 55%, #0F2847 100%);
+    border-radius: 16px;
+    padding: 2.75rem 3rem;
+    margin-bottom: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+.synora-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -5%;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+}
+.synora-hero-badge {
+    display: inline-block;
+    background: rgba(56, 189, 248, 0.15);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    color: #38BDF8;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 0.3rem 0.85rem;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+}
+.synora-hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -1px;
+    line-height: 1.1;
+}
+.synora-hero-subtitle {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #38BDF8;
+    margin: 0 0 0.75rem 0;
+}
+.synora-hero-desc {
+    font-size: 0.95rem;
+    color: #94A3B8;
+    margin: 0;
+    max-width: 640px;
+    line-height: 1.6;
+}
+
+/* Page headers */
+.page-header {
+    margin-bottom: 1.25rem;
+}
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 0 0 0.25rem 0;
+}
+.page-subtitle {
+    font-size: 0.9rem;
+    color: #64748B;
+    margin: 0;
+}
+
+.section-header {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: #38BDF8;
+    margin: 1.5rem 0 0.85rem 0;
+}
+
+/* SaaS KPI cards */
+.metric-card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 1.35rem 1.25rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 4px 14px rgba(11, 23, 42, 0.06);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s ease;
+}
+.metric-card:hover {
+    box-shadow: 0 8px 24px rgba(11, 23, 42, 0.1);
+}
+.metric-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #64748B;
+    margin-bottom: 0.6rem;
 }
 .metric-value {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #0A2342;
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #0F172A;
     line-height: 1;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
 }
 .metric-unit {
     font-size: 0.78rem;
-    color: #8BA8C0;
-    font-weight: 400;
+    color: #94A3B8;
+    font-weight: 500;
+    margin-bottom: 0.65rem;
+}
+.metric-status {
+    display: inline-block;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+}
+.status-success { background: #D1FAE5; color: #047857; }
+.status-warning { background: #FEF3C7; color: #B45309; }
+.status-critical { background: #FEE2E2; color: #B91C1C; }
+.status-neutral { background: #F1F5F9; color: #475569; }
+
+/* App cards */
+.app-card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 1.5rem 1.75rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(11, 23, 42, 0.04);
+    margin-bottom: 1rem;
+    color: #334155;
+}
+.app-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 0.5rem;
 }
 
-/* ── Alert Cards ── */
+/* Alerts */
 .alert-critical {
-    background: #FFF5F5;
+    background: #FEF2F2;
     border: 1px solid #FECACA;
     border-left: 4px solid #DC2626;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
 }
 .alert-warning {
     background: #FFFBEB;
     border: 1px solid #FDE68A;
-    border-left: 4px solid #D97706;
-    border-radius: 8px;
+    border-left: 4px solid #F59E0B;
+    border-radius: 12px;
     padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
 }
 .alert-success {
-    background: #F0FDF4;
-    border: 1px solid #BBF7D0;
-    border-left: 4px solid #16A34A;
-    border-radius: 8px;
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-left: 4px solid #10B981;
+    border-radius: 12px;
     padding: 1rem 1.25rem;
     margin-bottom: 0.75rem;
 }
@@ -177,49 +330,87 @@ html, body, [class*="css"] {
     font-weight: 600;
     font-size: 0.88rem;
     margin-bottom: 0.2rem;
+    color: #0F172A;
 }
 .alert-body {
     font-size: 0.82rem;
-    color: #4B5563;
+    color: #475569;
 }
 
-/* ── Summary & Recommendation Cards ── */
+/* Summary & recommendations */
 .summary-card {
     background: #FFFFFF;
-    border-radius: 10px;
+    border-radius: 14px;
     padding: 1.5rem 1.75rem;
-    border: 1px solid #E2EAF4;
-    box-shadow: 0 1px 4px rgba(10,35,66,0.06);
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(11, 23, 42, 0.04);
     margin-bottom: 1rem;
+    color: #334155;
 }
+.summary-heading {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 0.6rem;
+}
+.summary-body {
+    font-size: 0.88rem;
+    color: #334155;
+    line-height: 1.6;
+}
+.summary-body p { color: #334155; margin: 0 0 0.5rem 0; }
+.summary-body strong { color: #0F172A; font-weight: 600; }
+
+.report-section {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(11, 23, 42, 0.04);
+    margin-bottom: 1rem;
+    color: #334155;
+}
+.report-section h2 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0F172A !important;
+    margin: 0 0 0.75rem 0;
+}
+.report-section h3 {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1E293B !important;
+    margin: 0.75rem 0 0.4rem 0;
+}
+.report-section p, .report-section li {
+    color: #334155 !important;
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+.report-section strong { color: #0F172A !important; }
+
 .rec-card {
     background: #FFFFFF;
-    border-radius: 10px;
+    border-radius: 14px;
     padding: 1.25rem 1.5rem;
-    border: 1px solid #E2EAF4;
-    border-left: 4px solid #1B4F8A;
-    box-shadow: 0 1px 4px rgba(10,35,66,0.06);
+    border: 1px solid #E2E8F0;
+    border-left: 4px solid #38BDF8;
+    box-shadow: 0 2px 8px rgba(11, 23, 42, 0.04);
     margin-bottom: 0.85rem;
 }
-.rec-priority-high {
-    border-left-color: #DC2626;
-}
-.rec-priority-med {
-    border-left-color: #D97706;
-}
-.rec-priority-low {
-    border-left-color: #16A34A;
-}
+.rec-priority-high { border-left-color: #DC2626; }
+.rec-priority-med  { border-left-color: #F59E0B; }
+.rec-priority-low  { border-left-color: #10B981; }
 .rec-title {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: #0A2342;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0F172A;
     margin-bottom: 0.3rem;
 }
 .rec-body {
     font-size: 0.82rem;
-    color: #4B5563;
-    line-height: 1.5;
+    color: #475569;
+    line-height: 1.55;
 }
 .priority-badge {
     display: inline-block;
@@ -228,55 +419,103 @@ html, body, [class*="css"] {
     letter-spacing: 1px;
     text-transform: uppercase;
     padding: 0.15rem 0.55rem;
-    border-radius: 20px;
+    border-radius: 6px;
     margin-bottom: 0.5rem;
 }
 .badge-high { background: #FEE2E2; color: #DC2626; }
-.badge-med  { background: #FEF3C7; color: #D97706; }
-.badge-low  { background: #DCFCE7; color: #16A34A; }
+.badge-med  { background: #FEF3C7; color: #F59E0B; }
+.badge-low  { background: #D1FAE5; color: #047857; }
 
-/* ── Upload Zone ── */
+/* Upload zone */
 .upload-zone {
     background: #FFFFFF;
-    border: 2px dashed #C5D8EE;
-    border-radius: 12px;
-    padding: 2rem;
+    border: 2px dashed #CBD5E1;
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
     text-align: center;
-    transition: border-color 0.2s;
 }
 .upload-hint {
     font-size: 0.8rem;
-    color: #6B88A8;
+    color: #64748B;
     margin-top: 0.5rem;
 }
 
-/* ── Sample Data Button ── */
-.stDownloadButton > button {
-    background: #0A2342 !important;
-    color: white !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-size: 0.83rem !important;
-    font-weight: 500 !important;
-    padding: 0.5rem 1.25rem !important;
-}
-
-/* ── Chart Container ── */
-.chart-container {
+/* Financial highlight cards */
+.fin-card {
     background: #FFFFFF;
-    border-radius: 10px;
-    border: 1px solid #E2EAF4;
-    box-shadow: 0 1px 4px rgba(10,35,66,0.06);
-    padding: 1rem;
-    margin-bottom: 1rem;
+    border-radius: 14px;
+    padding: 1.25rem;
+    border: 1px solid #E2E8F0;
+    box-shadow: 0 2px 8px rgba(11, 23, 42, 0.04);
+    text-align: center;
+}
+.fin-value {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #0F172A;
+    line-height: 1;
+}
+.fin-label {
+    font-size: 0.75rem;
+    color: #64748B;
+    margin-top: 0.4rem;
+    font-weight: 500;
 }
 
-/* ── Divider ── */
+/* Buttons */
+.stButton > button[kind="primary"],
+.stDownloadButton > button {
+    background: linear-gradient(135deg, #0B172A, #1E293B) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    padding: 0.55rem 1.25rem !important;
+    box-shadow: 0 4px 12px rgba(11, 23, 42, 0.2) !important;
+    transition: all 0.2s ease !important;
+}
+.stButton > button[kind="primary"]:hover,
+.stDownloadButton > button:hover {
+    border-color: #38BDF8 !important;
+    box-shadow: 0 6px 16px rgba(56, 189, 248, 0.25) !important;
+}
+.stButton > button[kind="secondary"] {
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+}
+
+.chart-wrap {
+    background: #FFFFFF;
+    border-radius: 14px;
+    border: 1px solid #E2E8F0;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 2px 8px rgba(11, 23, 42, 0.04);
+}
+
 .section-divider {
     height: 1px;
-    background: linear-gradient(90deg, #1B4F8A22, #1B4F8A44, #1B4F8A22);
+    background: #E2E8F0;
     margin: 1.5rem 0;
 }
+
+.synora-footer {
+    text-align: center;
+    font-size: 0.72rem;
+    color: #94A3B8;
+    padding: 2rem 0 1rem 0;
+}
+
+.empty-state {
+    background: #FFFFFF;
+    border: 1px dashed #CBD5E1;
+    border-radius: 14px;
+    padding: 2.5rem;
+    text-align: center;
+    color: #64748B;
+}
+.empty-state strong { color: #0F172A; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -294,10 +533,19 @@ KPI_CONFIG = {
     "Admission Rate":      {"col": "Admission_Rate",      "unit": "%",          "threshold": None,  "higher_is_bad": False},
 }
 
-# Chart accent colors (clinical palette)
+# Chart accent colors (Synora palette)
 CHART_COLORS = [
-    "#1B4F8A", "#1A6BAE", "#2E8BC0", "#D97706",
-    "#DC2626", "#16A34A", "#7C3AED"
+    "#38BDF8", "#0B172A", "#1E293B", "#F59E0B",
+    "#DC2626", "#10B981", "#6366F1"
+]
+
+NAV_PAGES = [
+    "Overview",
+    "Upload Data",
+    "ED Operations",
+    "Financial Impact",
+    "AI Advisor",
+    "Reports",
 ]
 
 
@@ -324,12 +572,29 @@ def generate_sample_csv() -> bytes:
 # ─────────────────────────────────────────────
 # HELPER: Render a single metric card via HTML
 # ─────────────────────────────────────────────
-def metric_card(label: str, value: str, unit: str):
+def kpi_status_for_display(col: str, avg: float, cfg: dict) -> tuple[str, str]:
+    """Return (status_css_class, status_label) for KPI card display only."""
+    threshold = cfg.get("threshold")
+    if threshold is None:
+        if col == "Door_to_Provider_Min" and avg > 35:
+            return "status-warning", "Above benchmark"
+        return "status-neutral", "Tracking"
+    higher_is_bad = cfg.get("higher_is_bad", True)
+    if higher_is_bad:
+        if avg > threshold:
+            return ("status-critical", "Critical") if avg > threshold * 1.1 else ("status-warning", "Needs attention")
+        return "status-success", "On track"
+    return "status-neutral", "Tracking"
+
+
+def metric_card(label: str, value: str, unit: str, status_class: str = "status-neutral",
+                status_label: str = "Tracking"):
     st.markdown(f"""
     <div class="metric-card">
         <div class="metric-label">{label}</div>
         <div class="metric-value">{value}</div>
         <div class="metric-unit">{unit}</div>
+        <span class="metric-status {status_class}">{status_label}</span>
     </div>
     """, unsafe_allow_html=True)
 
@@ -338,7 +603,7 @@ def metric_card(label: str, value: str, unit: str):
 # HELPER: Build a styled Plotly line chart
 # ─────────────────────────────────────────────
 def build_line_chart(df: pd.DataFrame, col: str, label: str, unit: str,
-                     color: str, threshold: float | None) -> go.Figure:
+ color: str, threshold: Optional[float]) -> go.Figure:
     """Return a clean Plotly figure for a single KPI over time."""
     fig = go.Figure()
 
@@ -368,12 +633,12 @@ def build_line_chart(df: pd.DataFrame, col: str, label: str, unit: str,
         height=240,
         paper_bgcolor="white",
         plot_bgcolor="white",
-        font=dict(family="Inter, sans-serif", size=11, color="#4B5563"),
-        title=dict(text=label, font=dict(size=13, color="#0A2342", family="Inter"), x=0.02),
+        font=dict(family="Inter, sans-serif", size=11, color="#475569"),
+        title=dict(text=label, font=dict(size=13, color="#0F172A", family="Inter"), x=0.02),
         xaxis=dict(showgrid=False, tickfont=dict(size=9)),
         yaxis=dict(
             showgrid=True,
-            gridcolor="#F0F4F8",
+            gridcolor="#F1F5F9",
             tickfont=dict(size=9),
             title=dict(text=unit, font=dict(size=9)),
         ),
@@ -468,55 +733,81 @@ def render_executive_summary(df: pd.DataFrame, alerts: list[dict]):
     risk_label = "no critical risk flags" if risk_count == 0 else \
                  f"{risk_count} operational risk area{'s' if risk_count > 1 else ''}"
 
-    # Overview box
-    with st.container(border=True):
-        st.markdown("**📋 Overview**")
-        st.markdown(
-            f"Analysis of the uploaded KPI dataset covering **{len(df)} reporting periods** "
-            f"identified **{risk_label}** against established clinical thresholds. "
-            f"The ED processed an average of **{avgs.get('ED_Visits', 0):.0f} visits per period** "
-            f"with a mean admission rate of **{avgs.get('Admission_Rate', 0):.1f}%**."
-        )
+    # Overview
+    st.markdown(f"""
+    <div class="summary-card">
+        <div class="summary-heading">📋 Overview</div>
+        <div class="summary-body">
+            <p>Analysis of the uploaded KPI dataset covering <strong>{len(df)} reporting periods</strong>
+            identified <strong>{risk_label}</strong> against established clinical thresholds.
+            The ED processed an average of <strong>{avgs.get('ED_Visits', 0):.0f} visits per period</strong>
+            with a mean admission rate of <strong>{avgs.get('Admission_Rate', 0):.1f}%</strong>.</p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
 
     with col1:
-        with st.container(border=True):
-            st.markdown("**📈 Major Trends**")
-            if worsening:
-                st.markdown(f"📈 **Worsening:** {', '.join(worsening)} trended higher in the latter portion of the reporting period.")
-            if improving:
-                st.markdown(f"📉 **Improving:** {', '.join(improving)} showed measurable improvement over time.")
-            if not worsening and not improving:
-                st.markdown("Metrics remained relatively stable across the reporting period with no pronounced directional trends.")
+        trend_parts = []
+        if worsening:
+            trend_parts.append(
+                f"<p>📈 <strong>Worsening:</strong> {', '.join(worsening)} trended higher "
+                "in the latter portion of the reporting period.</p>"
+            )
+        if improving:
+            trend_parts.append(
+                f"<p>📉 <strong>Improving:</strong> {', '.join(improving)} showed measurable "
+                "improvement over time.</p>"
+            )
+        if not worsening and not improving:
+            trend_parts.append(
+                "<p>Metrics remained relatively stable across the reporting period "
+                "with no pronounced directional trends.</p>"
+            )
+        trends_html = "\n".join(trend_parts)
+        st.markdown(f"""
+        <div class="summary-card">
+            <div class="summary-heading">📈 Major Trends</div>
+            <div class="summary-body">{trends_html}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
     with col2:
-        with st.container(border=True):
-            st.markdown("**⚠️ Operational Risks**")
-            if alerts:
-                for a in alerts:
-                    icon = "🔴" if a["level"] == "critical" else "🟡"
-                    st.markdown(f"{icon} {a['title'].replace('⚠ ', '')}")
-            else:
-                st.markdown("✅ No KPIs exceeded defined thresholds during this period.")
+        if alerts:
+            risk_items = "".join(
+                f"<p>{'🔴' if a['level'] == 'critical' else '🟡'} "
+                f"{a['title'].replace('⚠ ', '')}</p>"
+                for a in alerts
+            )
+        else:
+            risk_items = "<p>✅ No KPIs exceeded defined thresholds during this period.</p>"
+        st.markdown(f"""
+        <div class="summary-card">
+            <div class="summary-heading">⚠️ Operational Risks</div>
+            <div class="summary-body">{risk_items}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
     # Areas performing well
-    with st.container(border=True):
-        st.markdown("**✅ Areas Performing Well**")
-        well = []
-        if "LOS_Hours" in avgs and avgs["LOS_Hours"] <= 7.0:
-            well.append(f"Length of Stay ({avgs['LOS_Hours']:.1f} hrs) is within target")
-        if "LWBS_Rate" in avgs and avgs["LWBS_Rate"] <= 4.0:
-            well.append(f"LWBS Rate ({avgs['LWBS_Rate']:.1f}%) is within acceptable range")
-        if "Staff_Gap" in avgs and avgs["Staff_Gap"] <= 5.0:
-            well.append(f"Staffing Gap ({avgs['Staff_Gap']:.1f} FTEs) is manageable")
-        if "Boarding_Hours" in avgs and avgs["Boarding_Hours"] <= 15.0:
-            well.append(f"Boarding Hours ({avgs['Boarding_Hours']:.1f} hrs) remain below threshold")
-        if well:
-            for w in well:
-                st.markdown(f"✅ {w}")
-        else:
-            st.markdown("All monitored KPIs require attention in the current period.")
+    well = []
+    if "LOS_Hours" in avgs and avgs["LOS_Hours"] <= 7.0:
+        well.append(f"<p>✅ Length of Stay ({avgs['LOS_Hours']:.1f} hrs) is within target</p>")
+    if "LWBS_Rate" in avgs and avgs["LWBS_Rate"] <= 4.0:
+        well.append(f"<p>✅ LWBS Rate ({avgs['LWBS_Rate']:.1f}%) is within acceptable range</p>")
+    if "Staff_Gap" in avgs and avgs["Staff_Gap"] <= 5.0:
+        well.append(f"<p>✅ Staffing Gap ({avgs['Staff_Gap']:.1f} FTEs) is manageable</p>")
+    if "Boarding_Hours" in avgs and avgs["Boarding_Hours"] <= 15.0:
+        well.append(f"<p>✅ Boarding Hours ({avgs['Boarding_Hours']:.1f} hrs) remain below threshold</p>")
+    if not well:
+        well.append("<p>All monitored KPIs require attention in the current period.</p>")
+    well_html = "\n".join(well)
+    st.markdown(f"""
+    <div class="summary-card">
+        <div class="summary-heading">✅ Areas Performing Well</div>
+        <div class="summary-body">{well_html}</div>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────
@@ -961,8 +1252,8 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
         rightMargin=0.85 * inch,
         topMargin=1.0 * inch,
         bottomMargin=0.9 * inch,
-        title="Healthcare Operations Consulting Report",
-        author="AI Healthcare Performance Improvement Platform",
+        title="Synora Operations Report",
+        author="Synora — AI Copilot for Healthcare Operations",
     )
 
     # ── Color palette
@@ -1217,7 +1508,7 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
     story.append(Spacer(1, 0.3 * inch))
     story.append(hr(color=colors.HexColor("#D1D5DB"), thickness=0.3))
     story.append(Paragraph(
-        f"AI Healthcare Performance Improvement Platform  ·  Confidential — For Executive Use Only  ·  "
+        f"Synora  ·  Confidential — For Executive Use Only  ·  "
         f"Generated {datetime.now().strftime('%B %d, %Y')}  ·  "
         "Financial estimates are directional and should be validated against facility-specific data.",
         footer_style
@@ -1237,7 +1528,7 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
         )
         canvas.drawString(
             0.85 * inch, 0.55 * inch,
-            "CONFIDENTIAL · AI Healthcare Performance Improvement Platform"
+            "CONFIDENTIAL · Synora"
         )
         canvas.restoreState()
 
@@ -1246,34 +1537,58 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
     return buf.read()
 
 
+def _markdown_to_report_html(text: str) -> str:
+    """Convert basic report markdown to HTML with explicit contrast-safe colors."""
+    lines = text.strip().split("\n")
+    parts = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped.startswith("### "):
+            parts.append(f"<h3>{stripped[4:]}</h3>")
+        elif stripped.startswith("## "):
+            parts.append(f"<h2>{stripped[3:]}</h2>")
+        elif stripped.startswith("- "):
+            content = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", stripped[2:])
+            parts.append(f"<p>• {content}</p>")
+        else:
+            content = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", stripped)
+            parts.append(f"<p>{content}</p>")
+    return "\n".join(parts)
+
+
 def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
     """Render the AI Consultant Report section with a generate button."""
 
-    st.markdown('<div class="section-header">Section 7 — AI Consultant Report</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-header"><h2 class="page-title">AI Advisor</h2>'
+                '<p class="page-subtitle">Synora-generated executive insights and prioritized recommendations</p></div>',
+                unsafe_allow_html=True)
 
     with st.container(border=True):
         col_desc, col_btn = st.columns([3, 1])
         with col_desc:
-            st.markdown("**🤖 AI Consultant Report Generator**")
+            st.markdown("**Generate Operations Brief**")
             st.markdown(
-                "Click the button to generate a professional healthcare operations consulting report "
-                "based on your uploaded KPI data. The report is structured for presentation to a COO "
-                "or Board Quality Committee and includes root cause analysis, financial impact estimates, "
-                "and a 30-60-90 day action plan."
+                "Synora analyzes your KPI data and produces a structured operations brief for COO "
+                "or Board Quality Committee review — including root cause analysis, financial impact "
+                "estimates, and a 30-60-90 day action plan."
             )
         with col_btn:
             st.markdown("<br>", unsafe_allow_html=True)
             generate = st.button("📋 Generate AI Consultant Report", type="primary", use_container_width=True)
 
+            generate = st.button("Generate Operations Brief", type="primary", use_container_width=True)
+
     if generate:
-        with st.spinner("Analyzing KPI data and generating consultant report..."):
+        with st.spinner("Synora is analyzing your KPI data..."):
             import time
             time.sleep(1.2)
             report_text = generate_consultant_report(df, alerts)
+            st.session_state.report_text = report_text
 
-        st.markdown("<br>", unsafe_allow_html=True)
-
-        # Report header banner
+    report_text = st.session_state.get("report_text")
+    if report_text:
         st.markdown(f"""
         <div style="background:linear-gradient(135deg,#0A2342,#1B4F8A);
                     border-radius:10px; padding:1.5rem 2rem; margin-bottom:1.5rem;">
@@ -1297,21 +1612,25 @@ def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
         first_section = sections[0]
         rest_sections = ["## " + s for s in sections[1:]]
 
-        with st.container(border=True):
-            st.markdown(first_section)
+        st.markdown(
+            f'<div class="report-section">{_markdown_to_report_html(first_section)}</div>',
+            unsafe_allow_html=True,
+        )
 
         for section in rest_sections:
-            with st.container(border=True):
-                st.markdown(section)
+            st.markdown(
+                f'<div class="report-section">{_markdown_to_report_html(section)}</div>',
+                unsafe_allow_html=True,
+            )
 
         # Generate and offer PDF download
         st.markdown("<br>", unsafe_allow_html=True)
         with st.spinner("Generating PDF..."):
             pdf_bytes = generate_executive_pdf(df, alerts, report_text)
         st.download_button(
-            label="⬇ Download Executive Report as PDF",
+            label="Download Executive PDF",
             data=pdf_bytes,
-            file_name=f"healthcare_consulting_report_{datetime.now().strftime('%Y%m%d')}.pdf",
+            file_name=f"synora_operations_report_{datetime.now().strftime('%Y%m%d')}.pdf",
             mime="application/pdf",
             type="primary",
         )
@@ -1709,7 +2028,7 @@ def main():
     # ── Footer
     st.markdown("<br><br>", unsafe_allow_html=True)
     st.markdown(
-        "<div style='text-align:center; font-size:0.72rem; color:#9EB3C8; padding-bottom:1.5rem;'>"
+        "<div style='text-align:center; font-size:0.72rem; color:#5C7088; padding-bottom:1.5rem;'>"
         "AI Healthcare Performance Improvement Platform · For executive use only · "
         f"Report generated {datetime.now().strftime('%B %d, %Y')}"
         "</div>",
