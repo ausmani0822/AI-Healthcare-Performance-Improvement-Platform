@@ -28,7 +28,7 @@ st.set_page_config(
     page_title="Synora · Executive Intelligence for Healthcare Operations",
     page_icon="◆",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # ─────────────────────────────────────────────
@@ -62,7 +62,7 @@ html, body, [class*="css"] {
     --synora-warning: #F4B740;
     --synora-critical: #E5484D;
     --nav-height: 64px;
-    --hero-nav-gap: 3.5rem;
+    --sidebar-width: 288px;
 }
 
 .stApp {
@@ -142,94 +142,143 @@ header[data-testid="stHeader"] {
     color: var(--synora-text) !important;
 }
 
-/* ── Primary top navigation ── */
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: var(--nav-height);
-    z-index: 999999;
-    background: rgba(5, 7, 10, 0.92);
-    backdrop-filter: blur(20px) saturate(160%);
-    -webkit-backdrop-filter: blur(20px) saturate(160%);
-    border-bottom: 1px solid var(--synora-border);
-    padding: 0 1.25rem;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) [data-testid="stHorizontalBlock"] {
-    height: var(--nav-height);
-    align-items: center !important;
-    max-width: 1440px;
-    margin: 0 auto;
-    gap: 0.2rem !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) .stButton > button {
-    width: 100% !important;
-    min-height: 2.1rem !important;
-    padding: 0.3rem 0.4rem !important;
-    border-radius: 8px !important;
-    font-size: 0.76rem !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.01em !important;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    color: var(--synora-muted) !important;
-    box-shadow: none !important;
-    white-space: nowrap !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) .stButton > button:hover {
-    color: var(--synora-text) !important;
-    background: rgba(255, 255, 255, 0.04) !important;
-    border-color: var(--synora-border) !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) .stButton > button[kind="primary"] {
-    color: var(--synora-text) !important;
-    background: rgba(255, 255, 255, 0.06) !important;
-    border-color: var(--synora-border) !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) [data-testid="column"]:last-child .stButton > button {
-    color: var(--synora-accent) !important;
-    border: 1px solid rgba(42, 108, 240, 0.4) !important;
-    background: var(--synora-accent-dim) !important;
-    border-radius: 999px !important;
-    font-weight: 600 !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) [data-testid="column"]:last-child .stButton > button[kind="primary"] {
-    color: var(--synora-text) !important;
-    background: rgba(42, 108, 240, 0.18) !important;
-    border-color: var(--synora-accent) !important;
-}
-
 /* ── Layout ── */
 .main .block-container {
     color: var(--synora-text);
-    padding-top: calc(var(--nav-height) + 1.25rem);
+    padding-top: calc(var(--nav-height) + 2rem);
     padding-bottom: 5rem;
     max-width: 1200px;
 }
-[data-testid="stSidebar"] {
-    display: none !important;
-}
-section[data-testid="stMain"] {
-    margin-left: 0 !important;
-}
-[data-testid="stAppViewContainer"] {
-    margin-left: 0 !important;
-}
-
 [data-testid="stHorizontalBlock"] { gap: 1.5rem; }
 [data-testid="column"] { padding: 0 0.35rem; }
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background: var(--synora-surface) !important;
+    border-right: 1px solid var(--synora-border) !important;
+    min-width: var(--sidebar-width) !important;
+    max-width: var(--sidebar-width) !important;
+}
+[data-testid="stSidebar"] > div:first-child {
+    padding: calc(var(--nav-height) + 0.75rem) 1rem 2.5rem 1rem;
+}
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarCollapsedControl"] {
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+}
+[data-testid="stSidebar"] .stRadio [data-baseweb="radio"],
+[data-testid="stSidebar"] .stRadio label > div:first-child {
+    display: none !important;
+}
+[data-testid="stSidebar"] .stRadio label {
+    padding-left: 0 !important;
+}
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] label {
+    color: var(--synora-muted) !important;
+}
+[data-testid="stSidebar"] hr {
+    border-color: var(--synora-border) !important;
+    margin: 1.5rem 0 !important;
+}
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] {
+    gap: 0.35rem;
+}
+[data-testid="stSidebar"] .stRadio label {
+    color: var(--synora-muted) !important;
+    font-weight: 500 !important;
+    font-size: 0.86rem !important;
+    width: 100%;
+}
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin: 0;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--synora-border);
+    color: var(--synora-text) !important;
+}
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) {
+    background: var(--synora-accent-dim) !important;
+    border-color: rgba(42, 108, 240, 0.28) !important;
+    border-left: 3px solid var(--synora-accent) !important;
+    color: var(--synora-text) !important;
+    box-shadow: none;
+    padding-left: calc(1rem - 2px) !important;
+}
+
+.synora-sidebar-brand {
+    padding: 0 0.35rem 1.75rem 0.35rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--synora-border);
+}
+.synora-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--synora-text);
+    letter-spacing: -0.03em;
+    margin: 0;
+    line-height: 1;
+}
+.synora-logo span {
+    color: var(--synora-muted);
+}
+.synora-sidebar-tagline {
+    font-size: 0.72rem;
+    font-weight: 400;
+    line-height: 1.55;
+    color: var(--synora-dim);
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+.synora-nav-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--synora-dim);
+    margin: 0.75rem 0 1rem 0.5rem;
+}
+.synora-sidebar-status {
+    background: var(--synora-glass);
+    border: 1px solid var(--synora-border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    backdrop-filter: blur(8px);
+}
+.synora-sidebar-status .status-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 0.45rem;
+    vertical-align: middle;
+}
+.status-dot-live { background: var(--synora-success); box-shadow: 0 0 10px rgba(29, 190, 114, 0.45); }
+.status-dot-idle { background: var(--synora-dim); }
 
 /* ── Full-screen hero ── */
 .synora-hero-fullscreen {
     position: relative;
-    min-height: calc(100vh - var(--nav-height) - var(--hero-nav-gap));
-    margin: var(--hero-nav-gap) -1rem 0 -1rem;
-    padding: 4rem 3rem 5rem 3rem;
+    min-height: calc(100vh - var(--nav-height) - 1rem);
+    margin: -1rem -1rem 0 -1rem;
+    padding: 7rem 4.5rem 6rem 4.5rem;
     border-radius: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     border: none;
     background:
         linear-gradient(180deg, rgba(5,7,10,0.15) 0%, rgba(5,7,10,1) 92%),
@@ -248,10 +297,8 @@ section[data-testid="stMain"] {
 .synora-hero-inner {
     position: relative;
     z-index: 2;
-    max-width: 880px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 0 1.5rem;
+    max-width: 960px;
+    padding-right: 3rem;
 }
 .synora-hero-brand {
     font-family: 'DM Sans', sans-serif;
@@ -835,15 +882,6 @@ PAGE_ROUTES = {
     "Board Ready Reports": "reports",
     "Settings": "settings",
 }
-
-PRIMARY_NAV_ITEMS = [
-    ("Mission Control", "Mission Control"),
-    ("Operational Intelligence", "Operational Intelligence"),
-    ("ED Operations", "ED Operations"),
-    ("Financial Intelligence", "Financial Intelligence"),
-    ("Executive Intelligence", "Executive Intelligence"),
-    ("Board Reports", "Board Ready Reports"),
-]
 
 NAV_ICONS = {
     "Mission Control": "◈",
@@ -2206,38 +2244,11 @@ def init_session_state():
 
 
 def apply_pending_nav():
-    """Apply programmatic navigation before nav buttons are rendered."""
+    """Apply programmatic navigation before the sidebar widget is created."""
     pending = st.session_state.nav_pending
-    if pending and pending in PAGE_ROUTES:
+    if pending and pending in NAV_PAGES:
         st.session_state.synora_nav = pending
         st.session_state.nav_pending = None
-
-
-def navigate_to(page: str):
-    if page in PAGE_ROUTES and st.session_state.synora_nav != page:
-        st.session_state.synora_nav = page
-        st.rerun()
-
-
-def _nav_button(label: str, page: str, key: str):
-    active = st.session_state.synora_nav == page
-    if st.button(label, key=key, type="primary" if active else "secondary"):
-        navigate_to(page)
-
-
-def render_top_nav():
-    st.markdown('<div class="synora-nav-shell-top"></div>', unsafe_allow_html=True)
-    logo, c1, c2, c3, c4, c5, c6, c7 = st.columns(
-        [1.05, 0.92, 1.12, 0.82, 1.02, 1.02, 0.82, 0.95]
-    )
-    with logo:
-        st.markdown('<div class="synora-topnav-logo">Syn<span>ora</span></div>', unsafe_allow_html=True)
-    nav_cols = [c1, c2, c3, c4, c5, c6]
-    for col, (label, page) in zip(nav_cols, PRIMARY_NAV_ITEMS):
-        with col:
-            _nav_button(label, page, f"nav_{page.lower().replace(' ', '_')}")
-    with c7:
-        _nav_button("Request Demo", "Board Ready Reports", "nav_request_demo")
 
 
 def _compute_operational_health(alerts: list) -> int:
@@ -2332,7 +2343,27 @@ def render_hero_ctas():
             st.rerun()
     with c2:
         if st.button("Import Operational Data", type="secondary", use_container_width=True, key="hero_import"):
-            navigate_to("Operational Intelligence")
+            st.session_state.nav_pending = "Operational Intelligence"
+            st.rerun()
+
+
+def render_top_nav():
+    st.markdown("""
+    <div class="synora-topnav">
+        <div class="synora-topnav-inner">
+            <div class="synora-topnav-left">
+                <div class="synora-topnav-logo">Syn<span>ora</span></div>
+            </div>
+            <nav class="synora-topnav-links">
+                <a href="#">Platform</a>
+                <a href="#">Solutions</a>
+                <a href="#">Technology</a>
+                <a href="#">About</a>
+                <a href="#" class="synora-topnav-cta">Request Demo</a>
+            </nav>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 
 def render_compact_hero():
@@ -2349,6 +2380,49 @@ def render_compact_hero():
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+
+def render_sidebar() -> str:
+    with st.sidebar:
+        st.markdown("""
+        <div class="synora-sidebar-brand">
+            <p class="synora-logo">Syn<span>ora</span></p>
+            <p class="synora-sidebar-tagline">Executive Intelligence for Healthcare Operations</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown('<p class="synora-nav-label">Modules</p>', unsafe_allow_html=True)
+        page = st.radio(
+            "Navigation",
+            NAV_PAGES,
+            format_func=lambda p: f"{NAV_ICONS.get(p, '·')}  {p}",
+            label_visibility="collapsed",
+            key="synora_nav",
+        )
+
+        st.markdown("---")
+        if st.session_state.df is not None:
+            periods = len(st.session_state.df)
+            st.markdown(f"""
+            <div class="synora-sidebar-status">
+                <span class="status-dot status-dot-live"></span>
+                <span style="font-size:0.82rem;color:#F5F7FA;font-weight:600;">Dataset Active</span>
+                <div style="font-size:0.75rem;color:#A7B0C0;margin-top:0.35rem;">{periods} reporting periods loaded</div>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.markdown("""
+            <div class="synora-sidebar-status">
+                <span class="status-dot status-dot-idle"></span>
+                <span style="font-size:0.82rem;color:#A7B0C0;">Awaiting data upload</span>
+                <div style="font-size:0.72rem;color:#6B7588;margin-top:0.35rem;">Upload via Operational Intelligence</div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown(
+            '<p style="font-size:0.68rem;color:#6B7588;margin-top:2rem;letter-spacing:0.5px;">Synora v1.0 · Enterprise</p>',
+            unsafe_allow_html=True,
+        )
+    return page
 
 
 def parse_uploaded_csv(uploaded_file) -> Optional[pd.DataFrame]:
@@ -2383,7 +2457,7 @@ def render_empty_state(message: str = "Upload a KPI dataset to unlock this view.
         <p><strong>No data loaded</strong></p>
         <p style="margin-top:0.5rem;">{message}</p>
         <p style="margin-top:1.25rem;font-size:0.85rem;color:#64748B;">
-            Go to <strong style="color:#2A6CF0;">Operational Intelligence</strong> in the navigation bar to get started.
+            Go to <strong style="color:#2A6CF0;">Operational Intelligence</strong> in the sidebar to get started.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -2648,8 +2722,8 @@ def main():
     init_session_state()
     apply_pending_nav()
     render_top_nav()
-    page = st.session_state.synora_nav
-    route = PAGE_ROUTES.get(page, "overview")
+    page = render_sidebar()
+    route = PAGE_ROUTES[page]
 
     if route == "overview":
         render_page_overview()
