@@ -268,6 +268,144 @@ header[data-testid="stHeader"] {
 .status-dot-live { background: var(--synora-success); box-shadow: 0 0 10px rgba(29, 190, 114, 0.45); }
 .status-dot-idle { background: var(--synora-dim); }
 
+/* ── Workspace drawer ── */
+.synora-drawer-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 7, 10, 0.58);
+    z-index: 1000000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+}
+.synora-drawer-backdrop.is-open {
+    opacity: 1;
+}
+.synora-workspace-drawer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-width);
+    height: 100vh;
+    background: var(--synora-surface);
+    border-right: 1px solid var(--synora-border);
+    z-index: 1000001;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    padding: calc(var(--nav-height) + 0.75rem) 1rem 2rem 1rem;
+}
+.synora-workspace-drawer.is-open {
+    transform: translateX(0);
+    box-shadow: 8px 0 40px rgba(0, 0, 0, 0.45);
+}
+.synora-drawer-header {
+    padding: 0 0.35rem 1.5rem 0.35rem;
+    margin-bottom: 0.75rem;
+    border-bottom: 1px solid var(--synora-border);
+}
+.synora-drawer-label {
+    font-size: 0.58rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--synora-dim);
+    margin: 0.65rem 0 0 0;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-trigger-anchor) {
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 1000003;
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    height: 38px !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-trigger-anchor) .stButton > button {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--synora-border) !important;
+    background: rgba(11, 17, 26, 0.94) !important;
+    color: var(--synora-muted) !important;
+    font-size: 1.05rem !important;
+    line-height: 1 !important;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28) !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-trigger-anchor) .stButton > button:hover {
+    background: var(--synora-accent-dim) !important;
+    border-color: rgba(42, 108, 240, 0.35) !important;
+    color: var(--synora-text) !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-overlay-anchor) {
+    position: fixed;
+    inset: 0;
+    z-index: 1000000;
+    width: 100vw !important;
+    height: 100vh !important;
+    pointer-events: none;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-overlay-anchor) .stButton {
+    width: 100%;
+    height: 100%;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-overlay-anchor) .stButton > button {
+    width: 100% !important;
+    height: 100vh !important;
+    min-height: 100vh !important;
+    opacity: 0 !important;
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    pointer-events: auto !important;
+    cursor: default !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-nav-anchor) {
+    position: fixed;
+    top: calc(var(--nav-height) + 5.25rem);
+    left: 0;
+    width: var(--sidebar-width);
+    z-index: 1000002;
+    padding: 0 1rem 1.5rem 1rem;
+    transform: translateX(-100%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+    pointer-events: none;
+    opacity: 0;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-nav-anchor.is-open) {
+    transform: translateX(0);
+    pointer-events: auto;
+    opacity: 1;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-nav-anchor.is-open) .stButton > button {
+    width: 100% !important;
+    min-height: 2.35rem !important;
+    padding: 0.65rem 0.85rem !important;
+    margin-bottom: 0.35rem !important;
+    border-radius: 10px !important;
+    font-size: 0.84rem !important;
+    font-weight: 500 !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: var(--synora-muted) !important;
+    box-shadow: none !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-nav-anchor.is-open) .stButton > button:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-color: var(--synora-border) !important;
+    color: var(--synora-text) !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-drawer-nav-anchor.is-open) .stButton > button[kind="primary"] {
+    background: var(--synora-accent-dim) !important;
+    border-color: rgba(42, 108, 240, 0.28) !important;
+    border-left: 3px solid var(--synora-accent) !important;
+    color: var(--synora-text) !important;
+}
+
 /* ── Full-screen hero ── */
 .synora-hero-fullscreen {
     position: relative;
@@ -2241,6 +2379,8 @@ def init_session_state():
         st.session_state.nav_pending = None
     if "show_platform" not in st.session_state:
         st.session_state.show_platform = False
+    if "workspace_drawer_open" not in st.session_state:
+        st.session_state.workspace_drawer_open = False
 
 
 def apply_pending_nav():
@@ -2249,6 +2389,47 @@ def apply_pending_nav():
     if pending and pending in NAV_PAGES:
         st.session_state.synora_nav = pending
         st.session_state.nav_pending = None
+
+
+def render_workspace_drawer():
+    """Collapsible left workspace navigation overlay."""
+    is_open = st.session_state.workspace_drawer_open
+    open_cls = " is-open" if is_open else ""
+
+    st.markdown(
+        f'<div class="synora-drawer-backdrop{open_cls}"></div>'
+        f'<aside class="synora-workspace-drawer{open_cls}">'
+        f'<div class="synora-drawer-header">'
+        f'<p class="synora-logo">Syn<span>ora</span></p>'
+        f'<p class="synora-drawer-label">Workspace</p>'
+        f'</div></aside>',
+        unsafe_allow_html=True,
+    )
+
+    if is_open:
+        st.markdown('<div class="synora-drawer-overlay-anchor"></div>', unsafe_allow_html=True)
+        if st.button("Close workspace menu", key="workspace_drawer_overlay"):
+            st.session_state.workspace_drawer_open = False
+            st.rerun()
+
+    st.markdown('<div class="synora-drawer-trigger-anchor"></div>', unsafe_allow_html=True)
+    if st.button("☰", key="workspace_drawer_toggle", help="Workspace navigation"):
+        st.session_state.workspace_drawer_open = not is_open
+        st.rerun()
+
+    st.markdown(f'<div class="synora-drawer-nav-anchor{open_cls}"></div>', unsafe_allow_html=True)
+    for page in NAV_PAGES:
+        label = f"{NAV_ICONS.get(page, '·')}  {page}"
+        active = st.session_state.synora_nav == page
+        if st.button(
+            label,
+            key=f"drawer_nav_{page.lower().replace(' ', '_')}",
+            type="primary" if active else "secondary",
+        ):
+            if not active:
+                st.session_state.nav_pending = page
+                st.session_state.workspace_drawer_open = False
+                st.rerun()
 
 
 def _compute_operational_health(alerts: list) -> int:
@@ -2721,6 +2902,7 @@ def render_page_reports(df: pd.DataFrame, alerts: list[dict]):
 def main():
     init_session_state()
     apply_pending_nav()
+    render_workspace_drawer()
     render_top_nav()
     page = render_sidebar()
     route = PAGE_ROUTES[page]
