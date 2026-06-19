@@ -2126,8 +2126,37 @@ def init_session_state():
         st.session_state.report_text = None
     if "synora_nav" not in st.session_state:
         st.session_state.synora_nav = "Mission Control"
+    if "nav_pending" not in st.session_state:
+        st.session_state.nav_pending = None
     if "show_platform" not in st.session_state:
         st.session_state.show_platform = False
+
+
+def apply_pending_nav():
+    """Apply programmatic navigation before the sidebar widget is created."""
+    pending = st.session_state.nav_pending
+    if pending and pending in NAV_PAGES:
+        st.session_state.synora_nav = pending
+        st.session_state.nav_pending = None
+
+
+def _build_hero_stats_html(df: Optional[pd.DataFrame]) -> str:
+    if df is None:
+        return ""
+    avgs = df.mean(numeric_only=True)
+    alerts = len(st.session_state.alerts)
+    return (
+        '<div class="synora-hero-stats">'
+        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{len(df)}</div>'
+        '<div class="synora-hero-stat-label">Reporting Periods</div></div>'
+        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{avgs.get("ED_Visits", 0):.0f}</div>'
+        '<div class="synora-hero-stat-label">Avg ED Visits</div></div>'
+        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{alerts}</div>'
+        '<div class="synora-hero-stat-label">Active Alerts</div></div>'
+        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{avgs.get("Admission_Rate", 0):.1f}%</div>'
+        '<div class="synora-hero-stat-label">Admission Rate</div></div>'
+        '</div>'
+    )
 
 
 def render_top_nav():
@@ -2148,61 +2177,32 @@ def render_top_nav():
 
 
 def render_landing_hero():
-    df = st.session_state.df
-    stats_html = ""
-    if df is not None:
-        avgs = df.mean(numeric_only=True)
-        alerts = len(st.session_state.alerts)
-        stats_html = f"""
-        <div class="synora-hero-stats">
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">{len(df)}</div>
-                <div class="synora-hero-stat-label">Reporting Periods</div>
-            </div>
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">{avgs.get('ED_Visits', 0):.0f}</div>
-                <div class="synora-hero-stat-label">Avg ED Visits</div>
-            </div>
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">{alerts}</div>
-                <div class="synora-hero-stat-label">Active Alerts</div>
-            </div>
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">{avgs.get('Admission_Rate', 0):.1f}%</div>
-                <div class="synora-hero-stat-label">Admission Rate</div>
-            </div>
-        </div>
-        """
-
-    st.markdown(f"""
-    <div class="synora-hero-fullscreen">
-        <div class="synora-hero-inner">
-            <div class="synora-hero-eyebrow">Executive Intelligence for Healthcare Operations</div>
-            <h1 class="synora-hero-title">Synora</h1>
-            <p class="synora-hero-tagline">Transform operational complexity into executive clarity.</p>
-            <p class="synora-hero-subtitle">
-                AI-powered operational intelligence for hospitals, health systems,
-                and executive leadership teams.
-            </p>
-            {stats_html}
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    hero_html = (
+        '<div class="synora-hero-fullscreen">'
+        '<div class="synora-hero-inner">'
+        '<div class="synora-hero-eyebrow">Executive Intelligence for Healthcare Operations</div>'
+        '<h1 class="synora-hero-title">Synora</h1>'
+        '<p class="synora-hero-tagline">Transform operational complexity into executive clarity.</p>'
+        '<p class="synora-hero-subtitle">'
+        'AI-powered operational intelligence for hospitals, health systems, '
+        'and executive leadership teams.'
+        '</p>'
+        + _build_hero_stats_html(st.session_state.df)
+        + '</div></div>'
+    )
+    st.markdown(hero_html, unsafe_allow_html=True)
 
 
 def render_hero_ctas():
-    st.markdown('<div class="synora-hero-cta-row">', unsafe_allow_html=True)
     c1, c2, _ = st.columns([1.15, 1.35, 2.5])
     with c1:
         if st.button("Explore Platform", type="primary", use_container_width=True, key="hero_explore"):
             st.session_state.show_platform = True
-            st.session_state.synora_nav = "Mission Control"
             st.rerun()
     with c2:
         if st.button("Import Operational Data", type="secondary", use_container_width=True, key="hero_import"):
-            st.session_state.synora_nav = "Operational Intelligence"
+            st.session_state.nav_pending = "Operational Intelligence"
             st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_compact_hero():
@@ -2354,9 +2354,8 @@ def render_kpi_charts(df: pd.DataFrame):
                     df, cfg["col"], name, cfg["unit"],
                     CHART_COLORS[(i + j) % len(CHART_COLORS)], cfg["threshold"],
                 )
-                st.markdown('<div class="chart-wrap">', unsafe_allow_html=True)
-                st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-                st.markdown('</div>', unsafe_allow_html=True)
+                with st.container(border=True):
+                    st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
 
 
 def render_alerts_panel(alerts: list[dict]):
@@ -2457,52 +2456,49 @@ def render_page_upload():
                 '<p class="page-subtitle">Import healthcare operations data to power Synora executive intelligence</p></div>',
                 unsafe_allow_html=True)
 
-    st.markdown('<div class="upload-panel">', unsafe_allow_html=True)
+    with st.container(border=True):
+        col_upload, col_sample = st.columns([3, 1])
+        with col_upload:
+            uploaded_file = st.file_uploader(
+                "Upload your hospital KPI CSV file",
+                type=["csv"],
+                help="CSV must include a 'Date' column plus one or more KPI columns.",
+                label_visibility="collapsed",
+            )
+        with col_sample:
+            st.markdown("<br>", unsafe_allow_html=True)
+            st.download_button(
+                label="Download Sample CSV",
+                data=generate_sample_csv(),
+                file_name="sample_hospital_kpi.csv",
+                mime="text/csv",
+                help="Download a pre-filled sample to explore Synora.",
+                use_container_width=True,
+            )
 
-    col_upload, col_sample = st.columns([3, 1])
-    with col_upload:
-        uploaded_file = st.file_uploader(
-            "Upload your hospital KPI CSV file",
-            type=["csv"],
-            help="CSV must include a 'Date' column plus one or more KPI columns.",
-            label_visibility="collapsed",
-        )
-    with col_sample:
-        st.markdown("<br>", unsafe_allow_html=True)
-        st.download_button(
-            label="Download Sample CSV",
-            data=generate_sample_csv(),
-            file_name="sample_hospital_kpi.csv",
-            mime="text/csv",
-            help="Download a pre-filled sample to explore Synora.",
-            use_container_width=True,
-        )
-
-    if uploaded_file is not None:
-        load_dataset(uploaded_file)
-        st.success(f"Dataset loaded — {len(st.session_state.df)} reporting periods ready for analysis.")
-    elif st.session_state.df is None:
-        st.markdown("""
-        <div class="upload-zone">
-            <div class="upload-icon">↑</div>
-            <div class="upload-title">Drop your KPI CSV here or use the uploader above</div>
-            <div class="upload-hint">
-                Synora accepts weekly or monthly hospital operations data with a Date column
+        if uploaded_file is not None:
+            load_dataset(uploaded_file)
+            st.success(f"Dataset loaded — {len(st.session_state.df)} reporting periods ready for analysis.")
+        elif st.session_state.df is None:
+            st.markdown("""
+            <div class="upload-zone">
+                <div class="upload-icon">↑</div>
+                <div class="upload-title">Drop your KPI CSV here or use the uploader above</div>
+                <div class="upload-hint">
+                    Synora accepts weekly or monthly hospital operations data with a Date column
+                </div>
+                <div class="upload-columns">
+                    <span class="upload-col-tag">Date</span>
+                    <span class="upload-col-tag">ED_Visits</span>
+                    <span class="upload-col-tag">LOS_Hours</span>
+                    <span class="upload-col-tag">Door_to_Provider_Min</span>
+                    <span class="upload-col-tag">LWBS_Rate</span>
+                    <span class="upload-col-tag">Boarding_Hours</span>
+                    <span class="upload-col-tag">Staff_Gap</span>
+                    <span class="upload-col-tag">Admission_Rate</span>
+                </div>
             </div>
-            <div class="upload-columns">
-                <span class="upload-col-tag">Date</span>
-                <span class="upload-col-tag">ED_Visits</span>
-                <span class="upload-col-tag">LOS_Hours</span>
-                <span class="upload-col-tag">Door_to_Provider_Min</span>
-                <span class="upload-col-tag">LWBS_Rate</span>
-                <span class="upload-col-tag">Boarding_Hours</span>
-                <span class="upload-col-tag">Staff_Gap</span>
-                <span class="upload-col-tag">Admission_Rate</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown('</div>', unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
     if st.session_state.df is not None:
         with st.expander("Preview raw data", expanded=False):
@@ -2547,6 +2543,7 @@ def render_page_reports(df: pd.DataFrame, alerts: list[dict]):
 # ═══════════════════════════════════════════════
 def main():
     init_session_state()
+    apply_pending_nav()
     render_top_nav()
     page = render_sidebar()
     route = PAGE_ROUTES[page]
