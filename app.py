@@ -1257,12 +1257,12 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
     )
 
     # ── Color palette
-    NAVY      = colors.HexColor("#0A2342")
-    MIDBLUE   = colors.HexColor("#1B4F8A")
-    LIGHTBLUE = colors.HexColor("#E8F0FA")
-    AMBER     = colors.HexColor("#D97706")
+    NAVY      = colors.HexColor("#0B172A")
+    MIDBLUE   = colors.HexColor("#1E293B")
+    LIGHTBLUE = colors.HexColor("#E0F2FE")
+    AMBER     = colors.HexColor("#F59E0B")
     RED       = colors.HexColor("#DC2626")
-    GREEN     = colors.HexColor("#16A34A")
+    GREEN     = colors.HexColor("#10B981")
     GRAY      = colors.HexColor("#6B7280")
     LIGHTGRAY = colors.HexColor("#F3F4F6")
     WHITE     = colors.white
@@ -1358,7 +1358,7 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
     ]))
     story.append(cover_table)
 
-    title_data = [[Paragraph("Healthcare Operations<br/>Consulting Report", cover_title)]]
+    title_data = [[Paragraph("Healthcare Operations<br/>Brief", cover_title)]]
     title_table = Table(title_data, colWidths=[6.3 * inch])
     title_table.setStyle(TableStyle([
         ("BACKGROUND",   (0, 0), (-1, -1), MIDBLUE),
@@ -1370,14 +1370,14 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
     story.append(title_table)
 
     sub_data = [[
-        Paragraph(f"Prepared by: AI Healthcare Performance Improvement Platform", cover_sub),
+        Paragraph("Prepared by: Synora — AI Copilot for Healthcare Operations", cover_sub),
         Paragraph(f"Report Date: {datetime.now().strftime('%B %d, %Y')}", cover_sub),
         Paragraph(f"Data Period: {date_range}", cover_sub),
         Paragraph(f"Reporting Periods Analyzed: {len(df)}", cover_sub),
     ]]
     sub_table = Table(sub_data, colWidths=[6.3 * inch])
     sub_table.setStyle(TableStyle([
-        ("BACKGROUND",   (0, 0), (-1, -1), colors.HexColor("#0D2E52")),
+        ("BACKGROUND",   (0, 0), (-1, -1), colors.HexColor("#0F2847")),
         ("TOPPADDING",   (0, 0), (-1, -1), 10),
         ("BOTTOMPADDING",(0, 0), (-1, -1), 28),
         ("LEFTPADDING",  (0, 0), (-1, -1), 24),
@@ -1561,14 +1561,14 @@ def _markdown_to_report_html(text: str) -> str:
 def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
     """Render the AI Consultant Report section with a generate button."""
 
-    st.markdown('<div class="page-header"><h2 class="page-title">AI Advisor</h2>'
-                '<p class="page-subtitle">Synora-generated executive insights and prioritized recommendations</p></div>',
+    st.markdown('<div class="page-header"><h2 class="page-title">Reports</h2>'
+                '<p class="page-subtitle">Generate and download Synora executive operations briefs</p></div>',
                 unsafe_allow_html=True)
 
     with st.container(border=True):
         col_desc, col_btn = st.columns([3, 1])
         with col_desc:
-            st.markdown("**Generate Operations Brief**")
+            st.markdown("**Operations Brief Generator**")
             st.markdown(
                 "Synora analyzes your KPI data and produces a structured operations brief for COO "
                 "or Board Quality Committee review — including root cause analysis, financial impact "
@@ -1576,8 +1576,6 @@ def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
             )
         with col_btn:
             st.markdown("<br>", unsafe_allow_html=True)
-            generate = st.button("📋 Generate AI Consultant Report", type="primary", use_container_width=True)
-
             generate = st.button("Generate Operations Brief", type="primary", use_container_width=True)
 
     if generate:
@@ -1590,19 +1588,18 @@ def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
     report_text = st.session_state.get("report_text")
     if report_text:
         st.markdown(f"""
-        <div style="background:linear-gradient(135deg,#0A2342,#1B4F8A);
-                    border-radius:10px; padding:1.5rem 2rem; margin-bottom:1.5rem;">
+        <div style="background:linear-gradient(135deg,#0B172A,#1E293B);
+                    border-radius:14px; padding:1.5rem 2rem; margin-bottom:1.5rem;
+                    border:1px solid rgba(56,189,248,0.25);">
             <div style="font-size:0.7rem; font-weight:700; letter-spacing:2px;
-                        text-transform:uppercase; color:#A8C8E8; margin-bottom:0.4rem;">
-                Confidential · For Executive Use Only
+                        text-transform:uppercase; color:#38BDF8; margin-bottom:0.4rem;">
+                Confidential · Executive Brief
             </div>
-            <div style="font-family:'Playfair Display',serif; font-size:1.5rem;
-                        font-weight:600; color:#FFFFFF; margin-bottom:0.25rem;">
-                Healthcare Operations Consulting Report
+            <div style="font-size:1.5rem; font-weight:800; color:#FFFFFF; margin-bottom:0.25rem;">
+                Healthcare Operations Brief
             </div>
-            <div style="font-size:0.82rem; color:#A8C8E8;">
-                Prepared by: AI Healthcare Performance Improvement Platform &nbsp;·&nbsp;
-                {datetime.now().strftime("%B %d, %Y")}
+            <div style="font-size:0.82rem; color:#94A3B8;">
+                Prepared by Synora &nbsp;·&nbsp; {datetime.now().strftime("%B %d, %Y")}
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1640,24 +1637,22 @@ def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
 # SECTION 8: Portfolio Demo Mode
 # ─────────────────────────────────────────────
 def render_portfolio_demo():
-    """Render a professional product overview for recruiters and healthcare leaders."""
+    """Product overview for healthcare leaders and recruiters."""
 
-    st.markdown('<div class="section-header">Section 8 — Portfolio Demo Mode</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Platform Capabilities</div>', unsafe_allow_html=True)
 
-    # ── Top banner
     st.markdown("""
-    <div style="background:linear-gradient(135deg,#0A2342 0%,#1B4F8A 60%,#1A6BAE 100%);
-                border-radius:12px; padding:2rem 2.5rem; margin-bottom:1.5rem;">
+    <div style="background:linear-gradient(135deg,#0B172A 0%,#1E293B 60%,#0F2847 100%);
+                border-radius:14px; padding:2rem 2.5rem; margin-bottom:1.5rem;
+                border:1px solid rgba(56,189,248,0.2);">
         <div style="font-size:0.68rem; font-weight:700; letter-spacing:2px; text-transform:uppercase;
-                    color:#A8C8E8; margin-bottom:0.5rem;">Portfolio Project · Built for Demonstration</div>
-        <div style="font-family:'Playfair Display',serif; font-size:1.75rem; font-weight:600;
-                    color:#FFFFFF; line-height:1.25; margin-bottom:0.5rem;">
-            AI Healthcare Performance Improvement Platform
+                    color:#38BDF8; margin-bottom:0.5rem;">Built for Healthcare Operations Leaders</div>
+        <div style="font-size:1.75rem; font-weight:800; color:#FFFFFF; line-height:1.25; margin-bottom:0.5rem;">
+            Synora
         </div>
-        <div style="font-size:0.9rem; color:#C8DFF2; max-width:700px; line-height:1.6;">
-            A hospital executive intelligence tool that transforms raw KPI data into
-            structured operational insights, automated alerts, and a boardroom-ready
-            consulting report — in under 60 seconds.
+        <div style="font-size:0.9rem; color:#94A3B8; max-width:700px; line-height:1.6;">
+            Turn hospital KPI data into executive intelligence, financial insight, and action plans —
+            in under 60 seconds.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -1687,7 +1682,7 @@ def render_portfolio_demo():
             st.markdown("""
 Hospital operations data is often trapped in EMR exports, spreadsheets, and fragmented department reports. Leadership teams spend hours manually compiling KPIs before they can begin analysis.
 
-**This platform eliminates that delay.** Upload a single CSV and within seconds receive:
+**Synora eliminates that delay.** Upload a single CSV and within seconds receive:
 - Threshold-based clinical alerts
 - Trend direction analysis across all KPIs
 - A prioritized recommendation set
@@ -1702,8 +1697,8 @@ Hospital operations data is often trapped in EMR exports, spreadsheets, and frag
     # ── Row 2: Key Features (3 columns)
     st.markdown("""
     <div style="font-size:0.72rem; font-weight:700; letter-spacing:2px; text-transform:uppercase;
-                color:#1B4F8A; border-left:3px solid #1B4F8A; padding-left:0.75rem; margin-bottom:1rem;">
-        Key Features
+                color:#38BDF8; margin-bottom:1rem;">
+        Key Capabilities
     </div>
     """, unsafe_allow_html=True)
 
@@ -1759,15 +1754,15 @@ Hospital operations data is often trapped in EMR exports, spreadsheets, and frag
             with col:
                 st.markdown(f"""
                 <div style="text-align:center; padding:1rem 0.5rem;">
-                    <div style="font-size:1.9rem; font-weight:700; color:#0A2342; line-height:1;">{val}</div>
-                    <div style="font-size:0.78rem; color:#6B88A8; margin-top:0.35rem; line-height:1.4;">{label}</div>
+                    <div style="font-size:1.9rem; font-weight:800; color:#0F172A; line-height:1;">{val}</div>
+                    <div style="font-size:0.78rem; color:#64748B; margin-top:0.35rem; line-height:1.4;">{label}</div>
                 </div>
                 """, unsafe_allow_html=True)
 
         st.markdown("---")
         st.markdown("""
 Traditional healthcare performance consulting engagements cost **$50,000–$250,000** and take 4–8 weeks to deliver a report of this structure.
-This platform produces an equivalent first-pass analysis in under a minute, enabling leadership teams to:
+Synora produces an equivalent first-pass analysis in under a minute, enabling leadership teams to:
 
 - **Prioritize** which performance gaps require immediate intervention
 - **Quantify** the financial exposure before engaging an external consulting firm
@@ -1814,21 +1809,21 @@ This platform produces an equivalent first-pass analysis in under a minute, enab
 
     # ── Tech stack & contact footer
     st.markdown("""
-    <div style="background:#F8FAFC; border:1px solid #E2EAF4; border-radius:10px;
-                padding:1.25rem 1.75rem; display:flex; align-items:center; gap:2rem; flex-wrap:wrap;">
+    <div style="background:#FFFFFF; border:1px solid #E2E8F0; border-radius:14px;
+                padding:1.25rem 1.75rem;">
         <div>
             <div style="font-size:0.68rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
-                        color:#6B88A8; margin-bottom:0.4rem;">Tech Stack</div>
-            <div style="font-size:0.85rem; color:#0A2342; font-weight:500;">
+                        color:#64748B; margin-bottom:0.4rem;">Tech Stack</div>
+            <div style="font-size:0.85rem; color:#0F172A; font-weight:500;">
                 Python 3.11 &nbsp;·&nbsp; Streamlit &nbsp;·&nbsp; Pandas &nbsp;·&nbsp;
-                Plotly &nbsp;·&nbsp; NumPy &nbsp;·&nbsp; ReportLab &nbsp;·&nbsp; Replit
+                Plotly &nbsp;·&nbsp; NumPy &nbsp;·&nbsp; ReportLab
             </div>
         </div>
-        <div style="margin-left:auto;">
+        <div style="margin-top:1rem;">
             <div style="font-size:0.68rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
-                        color:#6B88A8; margin-bottom:0.4rem;">Built By</div>
-            <div style="font-size:0.85rem; color:#0A2342; font-weight:500;">
-                AI Healthcare Performance Improvement Platform &nbsp;·&nbsp; Portfolio Project
+                        color:#64748B; margin-bottom:0.4rem;">Product</div>
+            <div style="font-size:0.85rem; color:#0F172A; font-weight:500;">
+                Synora — AI Copilot for Healthcare Operations
             </div>
         </div>
     </div>
@@ -1836,28 +1831,232 @@ This platform produces an equivalent first-pass analysis in under a minute, enab
 
 
 # ═══════════════════════════════════════════════
-# MAIN APPLICATION
+# NAVIGATION & PAGE LAYOUT
 # ═══════════════════════════════════════════════
-def main():
+def init_session_state():
+    if "df" not in st.session_state:
+        st.session_state.df = None
+    if "alerts" not in st.session_state:
+        st.session_state.alerts = []
+    if "report_text" not in st.session_state:
+        st.session_state.report_text = None
 
-    # ── Header Banner ──────────────────────────
+
+def render_hero():
     st.markdown("""
-    <div class="header-banner">
-        <div class="header-tag">Executive Dashboard · AI-Powered</div>
-        <div class="header-title">AI Healthcare Performance<br>Improvement Platform</div>
-        <div class="header-subtitle">
-            Upload hospital KPI data and receive AI-driven operational insights and recommendations.
-        </div>
+    <div class="synora-hero">
+        <div class="synora-hero-badge">AI Copilot · Healthcare Operations</div>
+        <h1 class="synora-hero-title">Synora</h1>
+        <p class="synora-hero-subtitle">AI Copilot for Healthcare Operations</p>
+        <p class="synora-hero-desc">
+            Turn hospital KPI data into executive intelligence, financial insight, and action plans.
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
-    # ─────────────────────────────────────────
-    # SECTION 1: File Upload
-    # ─────────────────────────────────────────
-    st.markdown('<div class="section-header">Section 1 — Data Upload</div>', unsafe_allow_html=True)
+
+def render_sidebar() -> str:
+    with st.sidebar:
+        st.markdown("""
+        <div class="synora-sidebar-brand">
+            <p class="synora-logo">Syn<span>ora</span></p>
+            <p class="synora-sidebar-tag">Healthcare Operations AI</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        page = st.radio(
+            "Navigation",
+            NAV_PAGES,
+            label_visibility="collapsed",
+        )
+
+        st.markdown("---")
+        if st.session_state.df is not None:
+            periods = len(st.session_state.df)
+            st.markdown(f"**Dataset loaded** · {periods} periods")
+        else:
+            st.markdown("*No dataset loaded*")
+        st.markdown(
+            '<p style="font-size:0.7rem;color:#64748B;margin-top:2rem;">Synora v1.0</p>',
+            unsafe_allow_html=True,
+        )
+    return page
+
+
+def parse_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
+    try:
+        df = pd.read_csv(uploaded_file)
+    except Exception as e:
+        st.error(f"Could not read the file: {e}")
+        return None
+    if "Date" not in df.columns:
+        st.error("The uploaded CSV must contain a 'Date' column.")
+        return None
+    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
+    df = df.dropna(subset=["Date"]).sort_values("Date").reset_index(drop=True)
+    if df.empty:
+        st.error("No valid date rows found in the uploaded file.")
+        return None
+    return df
+
+
+def load_dataset(uploaded_file):
+    df = parse_uploaded_csv(uploaded_file)
+    if df is not None:
+        st.session_state.df = df
+        st.session_state.alerts = detect_problems(df)
+        st.session_state.report_text = None
+
+
+def render_empty_state(message: str = "Upload a KPI dataset to unlock this view."):
+    st.markdown(f"""
+    <div class="empty-state">
+        <p style="font-size:1.5rem;margin-bottom:0.5rem;">📊</p>
+        <p><strong>No data loaded</strong></p>
+        <p>{message}</p>
+        <p style="margin-top:1rem;font-size:0.85rem;">Go to <strong>Upload Data</strong> in the sidebar to get started.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_synora_footer():
+    st.markdown(
+        f'<div class="synora-footer">Synora · AI Copilot for Healthcare Operations · '
+        f'{datetime.now().strftime("%B %d, %Y")}</div>',
+        unsafe_allow_html=True,
+    )
+
+
+def render_kpi_metrics(df: pd.DataFrame):
+    avgs = df.mean(numeric_only=True)
+    metric_items = [
+        ("ED Visits", "ED_Visits", f"{avgs.get('ED_Visits', 0):.0f}", "visits / period"),
+        ("Length of Stay", "LOS_Hours", f"{avgs.get('LOS_Hours', 0):.1f}", "hours"),
+        ("Door-to-Provider", "Door_to_Provider_Min", f"{avgs.get('Door_to_Provider_Min', 0):.0f}", "minutes"),
+        ("LWBS Rate", "LWBS_Rate", f"{avgs.get('LWBS_Rate', 0):.1f}", "%"),
+        ("Boarding Hours", "Boarding_Hours", f"{avgs.get('Boarding_Hours', 0):.1f}", "hours"),
+        ("Staff Gap", "Staff_Gap", f"{avgs.get('Staff_Gap', 0):.1f}", "FTEs"),
+        ("Admission Rate", "Admission_Rate", f"{avgs.get('Admission_Rate', 0):.1f}", "%"),
+    ]
+    row1 = st.columns(4)
+    for i, (label, col, val, unit) in enumerate(metric_items[:4]):
+        cfg = next((c for n, c in KPI_CONFIG.items() if c["col"] == col), {})
+        status_class, status_label = kpi_status_for_display(col, avgs.get(col, 0), cfg)
+        with row1[i]:
+            metric_card(label, val, unit, status_class, status_label)
+    st.markdown("<br>", unsafe_allow_html=True)
+    row2 = st.columns(4)
+    for i, (label, col, val, unit) in enumerate(metric_items[4:]):
+        cfg = next((c for n, c in KPI_CONFIG.items() if c["col"] == col), {})
+        status_class, status_label = kpi_status_for_display(col, avgs.get(col, 0), cfg)
+        with row2[i]:
+            metric_card(label, val, unit, status_class, status_label)
+
+
+def render_kpi_charts(df: pd.DataFrame):
+    chart_items = [(name, cfg) for name, cfg in KPI_CONFIG.items() if cfg["col"] in df.columns]
+    for i in range(0, len(chart_items), 2):
+        cols = st.columns(2)
+        for j, (name, cfg) in enumerate(chart_items[i:i + 2]):
+            with cols[j]:
+                fig = build_line_chart(
+                    df, cfg["col"], name, cfg["unit"],
+                    CHART_COLORS[(i + j) % len(CHART_COLORS)], cfg["threshold"],
+                )
+                st.markdown('<div class="chart-wrap">', unsafe_allow_html=True)
+                st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
+                st.markdown('</div>', unsafe_allow_html=True)
+
+
+def render_alerts_panel(alerts: list[dict]):
+    if not alerts:
+        st.markdown("""
+        <div class="alert-success">
+            <div class="alert-title" style="color:#047857;">All KPIs Within Acceptable Thresholds</div>
+            <div class="alert-body">
+                No threshold violations detected. Continue monitoring and consider tightening benchmarks.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+    else:
+        for alert in alerts:
+            css_class = "alert-critical" if alert["level"] == "critical" else "alert-warning"
+            title_color = "#B91C1C" if alert["level"] == "critical" else "#B45309"
+            st.markdown(f"""
+            <div class="{css_class}">
+                <div class="alert-title" style="color:{title_color};">{alert['title']}</div>
+                <div class="alert-body">{alert['msg']}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+
+def render_financial_impact(df: pd.DataFrame, alerts: list[dict]):
+    report_text = generate_consultant_report(df, alerts)
+    sections = report_text.split("\n\n## ")
+    fin_section = None
+    for sec in sections:
+        if sec.strip().startswith("5. Estimated Financial Impact") or "## 5." in sec:
+            fin_section = sec if sec.startswith("##") else "## " + sec
+            break
+    if not fin_section:
+        for sec in sections:
+            if "Estimated Financial Impact" in sec:
+                fin_section = "## " + sec if not sec.startswith("##") else sec
+                break
+
+    st.markdown('<div class="section-header">Financial Exposure Analysis</div>', unsafe_allow_html=True)
+    if fin_section:
+        st.markdown(
+            f'<div class="report-section">{_markdown_to_report_html(fin_section)}</div>',
+            unsafe_allow_html=True,
+        )
+    else:
+        st.info("No financial exposure detected for the current dataset.")
+
+    action_section = None
+    for sec in sections:
+        if "30-60-90" in sec or sec.strip().startswith("6."):
+            action_section = sec if sec.startswith("##") else "## " + sec
+            break
+    if action_section:
+        st.markdown('<div class="section-header">30-60-90 Day Action Plan</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="report-section">{_markdown_to_report_html(action_section)}</div>',
+            unsafe_allow_html=True,
+        )
+
+
+def render_page_overview():
+    render_hero()
+    df = st.session_state.df
+    if df is not None:
+        alerts = st.session_state.alerts
+        avgs = df.mean(numeric_only=True)
+        c1, c2, c3, c4 = st.columns(4)
+        with c1:
+            st.markdown(f'<div class="fin-card"><div class="fin-value">{len(df)}</div>'
+                        '<div class="fin-label">Reporting Periods</div></div>', unsafe_allow_html=True)
+        with c2:
+            st.markdown(f'<div class="fin-card"><div class="fin-value">{avgs.get("ED_Visits", 0):.0f}</div>'
+                        '<div class="fin-label">Avg ED Visits</div></div>', unsafe_allow_html=True)
+        with c3:
+            st.markdown(f'<div class="fin-card"><div class="fin-value">{len(alerts)}</div>'
+                        '<div class="fin-label">Active Alerts</div></div>', unsafe_allow_html=True)
+        with c4:
+            st.markdown(f'<div class="fin-card"><div class="fin-value">{avgs.get("Admission_Rate", 0):.1f}%</div>'
+                        '<div class="fin-label">Admission Rate</div></div>', unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown('<div class="section-header">Quick Status</div>', unsafe_allow_html=True)
+        render_alerts_panel(alerts)
+    render_portfolio_demo()
+
+
+def render_page_upload():
+    st.markdown('<div class="page-header"><h2 class="page-title">Upload Data</h2>'
+                '<p class="page-subtitle">Import hospital KPI data to power Synora analytics</p></div>',
+                unsafe_allow_html=True)
 
     col_upload, col_sample = st.columns([3, 1])
-
     with col_upload:
         uploaded_file = st.file_uploader(
             "Upload your hospital KPI CSV file",
@@ -1865,23 +2064,24 @@ def main():
             help="CSV must include a 'Date' column plus one or more KPI columns.",
             label_visibility="collapsed",
         )
-
     with col_sample:
         st.markdown("<br>", unsafe_allow_html=True)
         st.download_button(
-            label="⬇ Download Sample CSV",
+            label="Download Sample CSV",
             data=generate_sample_csv(),
             file_name="sample_hospital_kpi.csv",
             mime="text/csv",
-            help="Download a pre-filled sample to explore the dashboard.",
+            help="Download a pre-filled sample to explore Synora.",
         )
 
-    # ── Upload hint when no file present
-    if uploaded_file is None:
+    if uploaded_file is not None:
+        load_dataset(uploaded_file)
+        st.success(f"Dataset loaded — {len(st.session_state.df)} reporting periods ready for analysis.")
+    elif st.session_state.df is None:
         st.markdown("""
         <div class="upload-zone">
             <div style="font-size:2rem; margin-bottom:0.5rem;">📂</div>
-            <div style="font-weight:600; color:#1B4F8A; font-size:0.9rem;">
+            <div style="font-weight:600; color:#0F172A; font-size:0.9rem;">
                 Drag and drop your CSV file above, or click to browse
             </div>
             <div class="upload-hint">
@@ -1890,150 +2090,73 @@ def main():
             </div>
         </div>
         """, unsafe_allow_html=True)
-        st.stop()
 
-    # ── Parse the uploaded file
-    try:
-        df = pd.read_csv(uploaded_file)
-    except Exception as e:
-        st.error(f"Could not read the file: {e}")
-        st.stop()
+    if st.session_state.df is not None:
+        with st.expander("Preview raw data", expanded=False):
+            st.dataframe(st.session_state.df, use_container_width=True)
 
-    # Validate the Date column
-    if "Date" not in df.columns:
-        st.error("The uploaded CSV must contain a 'Date' column.")
-        st.stop()
 
-    df["Date"] = pd.to_datetime(df["Date"], errors="coerce")
-    df = df.dropna(subset=["Date"]).sort_values("Date").reset_index(drop=True)
+def render_page_ed_operations(df: pd.DataFrame, alerts: list[dict]):
+    st.markdown('<div class="page-header"><h2 class="page-title">ED Operations</h2>'
+                '<p class="page-subtitle">Real-time KPI monitoring, trends, and clinical alerts</p></div>',
+                unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Key Performance Indicators</div>', unsafe_allow_html=True)
+    render_kpi_metrics(df)
+    st.markdown('<div class="section-header">Trend Analysis</div>', unsafe_allow_html=True)
+    render_kpi_charts(df)
+    st.markdown('<div class="section-header">Clinical Alerts</div>', unsafe_allow_html=True)
+    render_alerts_panel(alerts)
 
-    if df.empty:
-        st.error("No valid date rows found in the uploaded file.")
-        st.stop()
 
-    # ── Data preview (collapsed)
-    with st.expander("🔍 Preview raw data", expanded=False):
-        st.dataframe(df, use_container_width=True)
-
-    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
-
-    # ─────────────────────────────────────────
-    # SECTION 2: Key Metric Cards
-    # ─────────────────────────────────────────
-    st.markdown('<div class="section-header">Section 2 — Key Performance Indicators</div>', unsafe_allow_html=True)
-
-    avgs = df.mean(numeric_only=True)
-
-    metric_items = [
-        ("Avg ED Visits",         f"{avgs.get('ED_Visits', 0):.0f}",            "visits / period"),
-        ("Avg Length of Stay",    f"{avgs.get('LOS_Hours', 0):.1f}",             "hours"),
-        ("Avg Door-to-Provider",  f"{avgs.get('Door_to_Provider_Min', 0):.0f}",  "minutes"),
-        ("Avg LWBS Rate",         f"{avgs.get('LWBS_Rate', 0):.1f}",             "%"),
-        ("Avg Boarding Hours",    f"{avgs.get('Boarding_Hours', 0):.1f}",         "hours"),
-        ("Avg Staff Gap",         f"{avgs.get('Staff_Gap', 0):.1f}",             "FTEs"),
-        ("Avg Admission Rate",    f"{avgs.get('Admission_Rate', 0):.1f}",         "%"),
-    ]
-
-    row1 = st.columns(4)
-    for i, (label, val, unit) in enumerate(metric_items[:4]):
-        with row1[i]:
-            metric_card(label, val, unit)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-
-    row2 = st.columns(4)
-    for i, (label, val, unit) in enumerate(metric_items[4:]):
-        with row2[i]:
-            metric_card(label, val, unit)
-
-    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
-
-    # ─────────────────────────────────────────
-    # SECTION 3: KPI Trend Charts
-    # ─────────────────────────────────────────
-    st.markdown('<div class="section-header">Section 3 — KPI Trends Over Time</div>', unsafe_allow_html=True)
-
-    chart_items = [(name, cfg) for name, cfg in KPI_CONFIG.items() if cfg["col"] in df.columns]
-
-    for i in range(0, len(chart_items), 2):
-        cols = st.columns(2)
-        for j, (name, cfg) in enumerate(chart_items[i:i+2]):
-            with cols[j]:
-                fig = build_line_chart(
-                    df, cfg["col"], name, cfg["unit"],
-                    CHART_COLORS[i + j], cfg["threshold"]
-                )
-                st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
-
-    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
-
-    # ─────────────────────────────────────────
-    # SECTION 4: Problem Area Detection
-    # ─────────────────────────────────────────
-    st.markdown('<div class="section-header">Section 4 — Problem Area Detection</div>', unsafe_allow_html=True)
-
-    alerts = detect_problems(df)
-
-    if not alerts:
-        st.markdown("""
-        <div class="alert-success">
-            <div class="alert-title" style="color:#15803D;">✅ All KPIs Within Acceptable Thresholds</div>
-            <div class="alert-body">
-                No threshold violations detected in the uploaded dataset.
-                Continue monitoring and consider tightening benchmarks.
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-    else:
-        for alert in alerts:
-            css_class = "alert-critical" if alert["level"] == "critical" else "alert-warning"
-            title_color = "#991B1B" if alert["level"] == "critical" else "#92400E"
-            st.markdown(f"""
-            <div class="{css_class}">
-                <div class="alert-title" style="color:{title_color};">{alert['title']}</div>
-                <div class="alert-body">{alert['msg']}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
-
-    # ─────────────────────────────────────────
-    # SECTION 5: Executive Summary
-    # ─────────────────────────────────────────
-    st.markdown('<div class="section-header">Section 5 — Executive Summary</div>', unsafe_allow_html=True)
+def render_page_ai_advisor(df: pd.DataFrame, alerts: list[dict]):
+    st.markdown('<div class="page-header"><h2 class="page-title">AI Advisor</h2>'
+                '<p class="page-subtitle">Synora executive summary and prioritized recommendations</p></div>',
+                unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Executive Summary</div>', unsafe_allow_html=True)
     render_executive_summary(df, alerts)
-
-    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
-
-    # ─────────────────────────────────────────
-    # SECTION 6: Recommendations
-    # ─────────────────────────────────────────
-    st.markdown('<div class="section-header">Section 6 — Operational Recommendations</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Operational Recommendations</div>', unsafe_allow_html=True)
     render_recommendations(df, alerts)
 
-    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    # ─────────────────────────────────────────
-    # SECTION 7: AI Consultant Report
-    # ─────────────────────────────────────────
+def render_page_financial_impact(df: pd.DataFrame, alerts: list[dict]):
+    st.markdown('<div class="page-header"><h2 class="page-title">Financial Impact</h2>'
+                '<p class="page-subtitle">Directional cost exposure and revenue impact estimates</p></div>',
+                unsafe_allow_html=True)
+    render_financial_impact(df, alerts)
+
+
+def render_page_reports(df: pd.DataFrame, alerts: list[dict]):
     render_consultant_report(df, alerts)
 
-    st.markdown('<div class="section-divider"></div>', unsafe_allow_html=True)
 
-    # ─────────────────────────────────────────
-    # SECTION 8: Portfolio Demo Mode
-    # ─────────────────────────────────────────
-    render_portfolio_demo()
+# ═══════════════════════════════════════════════
+# MAIN APPLICATION
+# ═══════════════════════════════════════════════
+def main():
+    init_session_state()
+    page = render_sidebar()
 
-    # ── Footer
-    st.markdown("<br><br>", unsafe_allow_html=True)
-    st.markdown(
-        "<div style='text-align:center; font-size:0.72rem; color:#5C7088; padding-bottom:1.5rem;'>"
-        "AI Healthcare Performance Improvement Platform · For executive use only · "
-        f"Report generated {datetime.now().strftime('%B %d, %Y')}"
-        "</div>",
-        unsafe_allow_html=True
-    )
+    if page == "Overview":
+        render_page_overview()
+    elif page == "Upload Data":
+        render_page_upload()
+    else:
+        if st.session_state.df is None:
+            render_hero()
+            render_empty_state()
+        else:
+            df = st.session_state.df
+            alerts = st.session_state.alerts
+            if page == "ED Operations":
+                render_page_ed_operations(df, alerts)
+            elif page == "Financial Impact":
+                render_page_financial_impact(df, alerts)
+            elif page == "AI Advisor":
+                render_page_ai_advisor(df, alerts)
+            elif page == "Reports":
+                render_page_reports(df, alerts)
+
+    render_synora_footer()
 
 
 # ─────────────────────────────────────────────
