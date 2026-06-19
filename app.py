@@ -5,6 +5,7 @@ Executive dashboard for KPI analysis, operational intelligence, and decision sup
 from typing import Optional
 import re
 import streamlit as st
+import streamlit.components.v1 as components
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
@@ -36,28 +37,33 @@ st.set_page_config(
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 html, body, [class*="css"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 :root {
-    --synora-bg: #030508;
-    --synora-surface: #0A0E17;
+    --synora-bg: #05070A;
+    --synora-surface: #0B111A;
     --synora-elevated: #111827;
-    --synora-glass: rgba(17, 24, 39, 0.72);
-    --synora-border: rgba(148, 163, 184, 0.1);
-    --synora-border-hover: rgba(34, 211, 238, 0.35);
-    --synora-cyan: #22D3EE;
-    --synora-cyan-dim: rgba(34, 211, 238, 0.15);
-    --synora-text: #F8FAFC;
-    --synora-muted: #94A3B8;
-    --synora-dim: #64748B;
-    --synora-success: #34D399;
-    --synora-warning: #FBBF24;
-    --synora-critical: #F87171;
+    --synora-glass: rgba(11, 17, 26, 0.94);
+    --synora-border: #1F2937;
+    --synora-border-hover: rgba(42, 108, 240, 0.45);
+    --synora-accent: #2A6CF0;
+    --synora-accent-dim: rgba(42, 108, 240, 0.12);
+    --synora-cyan: var(--synora-accent);
+    --synora-cyan-dim: var(--synora-accent-dim);
+    --synora-text: #F5F7FA;
+    --synora-muted: #A7B0C0;
+    --synora-dim: #6B7588;
+    --synora-success: #1DBE72;
+    --synora-warning: #F4B740;
+    --synora-critical: #E5484D;
     --nav-height: 64px;
+    --sidebar-width: 288px;
 }
 
 .stApp {
@@ -65,7 +71,13 @@ html, body, [class*="css"] {
     color: var(--synora-text);
 }
 
-#MainMenu, footer, header[data-testid="stHeader"] { visibility: hidden; height: 0; }
+#MainMenu, footer { visibility: hidden; height: 0; }
+header[data-testid="stHeader"] {
+    visibility: hidden !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
 
 /* ── Sticky top navigation ── */
 .synora-topnav {
@@ -73,7 +85,7 @@ html, body, [class*="css"] {
     top: 0; left: 0; right: 0;
     height: var(--nav-height);
     z-index: 999999;
-    background: rgba(3, 5, 8, 0.75);
+    background: rgba(5, 7, 10, 0.88);
     backdrop-filter: blur(20px) saturate(160%);
     -webkit-backdrop-filter: blur(20px) saturate(160%);
     border-bottom: 1px solid var(--synora-border);
@@ -82,11 +94,45 @@ html, body, [class*="css"] {
     max-width: 1440px;
     margin: 0 auto;
     height: 100%;
-    padding: 0 2rem;
+    padding: 0 1.5rem 0 1.25rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+.synora-topnav-left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+.synora-nav-toggle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    background: transparent;
+    border: 1px solid var(--synora-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+    flex-shrink: 0;
+}
+.synora-nav-toggle span {
+    display: block;
+    width: 15px;
+    height: 1.5px;
+    background: var(--synora-muted);
+    border-radius: 1px;
+    transition: background 0.15s ease;
+}
+.synora-nav-toggle:hover {
+    background: var(--synora-accent-dim);
+    border-color: rgba(42, 108, 240, 0.35);
+}
+.synora-nav-toggle:hover span { background: var(--synora-text); }
 .synora-topnav-logo {
     font-family: 'DM Sans', sans-serif;
     font-size: 1.25rem;
@@ -114,16 +160,16 @@ html, body, [class*="css"] {
 .synora-topnav-cta {
     font-size: 0.82rem !important;
     font-weight: 600 !important;
-    color: var(--synora-cyan) !important;
-    border: 1px solid rgba(34, 211, 238, 0.4) !important;
+    color: var(--synora-accent) !important;
+    border: 1px solid rgba(42, 108, 240, 0.4) !important;
     padding: 0.45rem 1rem !important;
     border-radius: 999px !important;
-    background: rgba(34, 211, 238, 0.06) !important;
+    background: var(--synora-accent-dim) !important;
     transition: all 0.2s ease !important;
 }
 .synora-topnav-cta:hover {
-    background: rgba(34, 211, 238, 0.12) !important;
-    border-color: var(--synora-cyan) !important;
+    background: rgba(42, 108, 240, 0.18) !important;
+    border-color: var(--synora-accent) !important;
     color: var(--synora-text) !important;
 }
 
@@ -139,12 +185,29 @@ html, body, [class*="css"] {
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    background: rgba(6, 9, 14, 0.95) !important;
-    border-right: 1px solid var(--synora-border);
-    backdrop-filter: blur(12px);
+    background: var(--synora-surface) !important;
+    border-right: 1px solid var(--synora-border) !important;
+    min-width: var(--sidebar-width) !important;
+    max-width: var(--sidebar-width) !important;
 }
 [data-testid="stSidebar"] > div:first-child {
-    padding: calc(var(--nav-height) + 1rem) 1.25rem 2.5rem 1.25rem;
+    padding: calc(var(--nav-height) + 0.75rem) 1rem 2.5rem 1rem;
+}
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarCollapsedControl"] {
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
+}
+[data-testid="stSidebar"] .stRadio [data-baseweb="radio"],
+[data-testid="stSidebar"] .stRadio label > div:first-child {
+    display: none !important;
+}
+[data-testid="stSidebar"] .stRadio label {
+    padding-left: 0 !important;
 }
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
@@ -173,21 +236,34 @@ html, body, [class*="css"] {
     transition: background 0.15s ease, border-color 0.15s ease;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-    background: rgba(255, 255, 255, 0.025);
+    background: rgba(255, 255, 255, 0.03);
     border-color: var(--synora-border);
     color: var(--synora-text) !important;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border-color: rgba(148, 163, 184, 0.22) !important;
+    background: var(--synora-accent-dim) !important;
+    border-color: rgba(42, 108, 240, 0.28) !important;
+    border-left: 3px solid var(--synora-accent) !important;
     color: var(--synora-text) !important;
     box-shadow: none;
+    padding-left: calc(1rem - 2px) !important;
 }
 
 .synora-sidebar-brand {
-    padding: 0 0.35rem 2rem 0.35rem;
+    padding: 0 0.35rem 1.75rem 0.35rem;
     margin-bottom: 0.75rem;
     border-bottom: 1px solid var(--synora-border);
+}
+.synora-sidebar-brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.65rem;
+}
+.synora-sidebar-collapse {
+    width: 34px;
+    height: 34px;
 }
 .synora-logo {
     font-family: 'DM Sans', sans-serif;
@@ -195,7 +271,7 @@ html, body, [class*="css"] {
     font-weight: 600;
     color: var(--synora-text);
     letter-spacing: -0.03em;
-    margin: 0 0 0.65rem 0;
+    margin: 0;
     line-height: 1;
 }
 .synora-logo span {
@@ -231,7 +307,7 @@ html, body, [class*="css"] {
     margin-right: 0.45rem;
     vertical-align: middle;
 }
-.status-dot-live { background: var(--synora-success); box-shadow: 0 0 10px rgba(52,211,153,0.6); }
+.status-dot-live { background: var(--synora-success); box-shadow: 0 0 10px rgba(29, 190, 114, 0.45); }
 .status-dot-idle { background: var(--synora-dim); }
 
 /* ── Full-screen hero ── */
@@ -247,10 +323,10 @@ html, body, [class*="css"] {
     justify-content: center;
     border: none;
     background:
-        linear-gradient(180deg, rgba(3,5,8,0.2) 0%, rgba(3,5,8,1) 92%),
-        repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(148,163,184,0.035) 47px, rgba(148,163,184,0.035) 48px),
-        repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(148,163,184,0.035) 47px, rgba(148,163,184,0.035) 48px),
-        #030508;
+        linear-gradient(180deg, rgba(5,7,10,0.15) 0%, rgba(5,7,10,1) 92%),
+        repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(167,176,192,0.04) 47px, rgba(167,176,192,0.04) 48px),
+        repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(167,176,192,0.04) 47px, rgba(167,176,192,0.04) 48px),
+        var(--synora-bg);
 }
 .synora-hero-fullscreen::after {
     content: '';
@@ -276,13 +352,13 @@ html, body, [class*="css"] {
     margin: 0 0 3.25rem 0;
 }
 .synora-hero-headline {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Space Grotesk', 'DM Sans', sans-serif;
     font-size: clamp(3.25rem, 7.5vw, 5.75rem);
-    font-weight: 600;
+    font-weight: 500;
     color: var(--synora-text);
     margin: 0 0 3rem 0;
-    letter-spacing: -0.035em;
-    line-height: 1.0;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
     text-transform: none;
 }
 .synora-hero-headline span {
@@ -292,22 +368,24 @@ html, body, [class*="css"] {
     margin-top: 0.08em;
 }
 .synora-hero-statement {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Space Grotesk', 'DM Sans', sans-serif;
     font-size: clamp(1.35rem, 2.4vw, 1.85rem);
-    font-weight: 500;
+    font-weight: 400;
     color: var(--synora-muted);
     margin: 0 0 2.25rem 0;
-    letter-spacing: -0.02em;
-    line-height: 1.35;
+    letter-spacing: -0.025em;
+    line-height: 1.4;
     max-width: 560px;
 }
 .synora-hero-desc {
-    font-size: 1rem;
-    color: var(--synora-dim);
+    font-family: 'Inter', sans-serif;
+    font-size: 1.02rem;
+    color: var(--synora-muted);
     margin: 0 0 0.5rem 0;
-    max-width: 520px;
-    line-height: 1.8;
+    max-width: 540px;
+    line-height: 1.75;
     font-weight: 400;
+    opacity: 0.92;
 }
 
 .synora-hero-actions {
@@ -326,7 +404,7 @@ html, body, [class*="css"] {
     gap: 0;
     border-top: 1px solid var(--synora-border);
     border-bottom: 1px solid var(--synora-border);
-    background: rgba(10, 14, 23, 0.65);
+    background: var(--synora-surface);
 }
 .synora-status-item {
     padding: 1.75rem 2rem;
@@ -346,9 +424,9 @@ html, body, [class*="css"] {
 }
 .synora-status-value {
     display: block;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Space Grotesk', 'DM Sans', sans-serif;
     font-size: 1.65rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--synora-text);
     letter-spacing: -0.02em;
     line-height: 1;
@@ -396,12 +474,12 @@ html, body, [class*="css"] {
     border-bottom: 1px solid var(--synora-border);
 }
 .page-title {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Space Grotesk', 'DM Sans', sans-serif;
     font-size: 2rem;
-    font-weight: 600;
+    font-weight: 500;
     color: var(--synora-text);
     margin: 0 0 0.85rem 0;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.035em;
 }
 .page-subtitle {
     font-size: 0.95rem;
@@ -411,7 +489,7 @@ html, body, [class*="css"] {
     max-width: 560px;
 }
 .section-header {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Space Grotesk', 'DM Sans', sans-serif;
     font-size: 0.62rem;
     font-weight: 600;
     letter-spacing: 0.16em;
@@ -434,7 +512,7 @@ html, body, [class*="css"] {
 }
 .exec-kpi-card:hover {
     transform: translateY(-2px);
-    border-color: rgba(148, 163, 184, 0.22);
+    border-color: rgba(42, 108, 240, 0.22);
     box-shadow: 0 12px 32px rgba(0,0,0,0.22);
 }
 .exec-kpi-glow {
@@ -451,11 +529,11 @@ html, body, [class*="css"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(34,211,238,0.08);
-    border: 1px solid rgba(34,211,238,0.18);
+    background: var(--synora-accent-dim);
+    border: 1px solid rgba(42, 108, 240, 0.22);
     border-radius: 10px;
     font-size: 0.95rem;
-    color: var(--synora-cyan);
+    color: var(--synora-accent);
 }
 .exec-kpi-title {
     font-size: 0.72rem;
@@ -503,9 +581,9 @@ html, body, [class*="css"] {
     padding: 0.28rem 0.65rem;
     border-radius: 999px;
 }
-.status-success { background: rgba(52,211,153,0.1); color: #34D399; border: 1px solid rgba(52,211,153,0.22); }
-.status-warning { background: rgba(251,191,36,0.1); color: #FBBF24; border: 1px solid rgba(251,191,36,0.22); }
-.status-critical { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.22); }
+.status-success { background: rgba(29,190,114,0.1); color: var(--synora-success); border: 1px solid rgba(29,190,114,0.22); }
+.status-warning { background: rgba(244,183,64,0.1); color: var(--synora-warning); border: 1px solid rgba(244,183,64,0.22); }
+.status-critical { background: rgba(229,72,77,0.1); color: var(--synora-critical); border: 1px solid rgba(229,72,77,0.22); }
 .status-neutral { background: rgba(148,163,184,0.08); color: var(--synora-muted); border: 1px solid var(--synora-border); }
 
 /* Legacy metric-card alias */
@@ -537,7 +615,7 @@ html, body, [class*="css"] {
 [data-testid="stMarkdownContainer"] h3,
 [data-testid="stMarkdownContainer"] h4 {
     color: var(--synora-text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Space Grotesk', 'DM Sans', sans-serif;
     letter-spacing: -0.02em;
 }
 [data-testid="stMarkdownContainer"] strong,
@@ -568,9 +646,9 @@ html, body, [class*="css"] {
     margin-bottom: 1rem;
     backdrop-filter: blur(8px);
 }
-.alert-critical { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.18); border-left: 3px solid var(--synora-critical); }
-.alert-warning { background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.18); border-left: 3px solid var(--synora-warning); }
-.alert-success { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.18); border-left: 3px solid var(--synora-success); }
+.alert-critical { background: rgba(229,72,77,0.06); border: 1px solid rgba(229,72,77,0.18); border-left: 3px solid var(--synora-critical); }
+.alert-warning { background: rgba(244,183,64,0.06); border: 1px solid rgba(244,183,64,0.18); border-left: 3px solid var(--synora-warning); }
+.alert-success { background: rgba(29,190,114,0.06); border: 1px solid rgba(29,190,114,0.18); border-left: 3px solid var(--synora-success); }
 .alert-title { font-weight: 600; color: var(--synora-text); }
 .alert-body { color: var(--synora-muted); font-size: 0.88rem; line-height: 1.6; }
 
@@ -579,9 +657,9 @@ html, body, [class*="css"] {
 .rec-priority-med { border-left-color: var(--synora-warning); }
 .rec-priority-low { border-left-color: var(--synora-success); }
 .priority-badge { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.22rem 0.6rem; border-radius: 999px; }
-.badge-high { background: rgba(248,113,113,0.1); color: var(--synora-critical); border: 1px solid rgba(248,113,113,0.2); }
-.badge-med { background: rgba(251,191,36,0.1); color: var(--synora-warning); border: 1px solid rgba(251,191,36,0.2); }
-.badge-low { background: rgba(52,211,153,0.1); color: var(--synora-success); border: 1px solid rgba(52,211,153,0.2); }
+.badge-high { background: rgba(229,72,77,0.1); color: var(--synora-critical); border: 1px solid rgba(229,72,77,0.2); }
+.badge-med { background: rgba(244,183,64,0.1); color: var(--synora-warning); border: 1px solid rgba(244,183,64,0.2); }
+.badge-low { background: rgba(29,190,114,0.1); color: var(--synora-success); border: 1px solid rgba(29,190,114,0.2); }
 
 .upload-panel {
     background: var(--synora-glass);
@@ -592,24 +670,24 @@ html, body, [class*="css"] {
     margin-bottom: 2.5rem;
 }
 .upload-zone {
-    background: rgba(3,5,8,0.5);
-    border: 1px dashed rgba(34,211,238,0.22);
+    background: rgba(5, 7, 10, 0.55);
+    border: 1px dashed rgba(42, 108, 240, 0.28);
     border-radius: 16px;
     padding: 3.5rem 2rem;
     text-align: center;
     transition: border-color 0.2s ease;
 }
-.upload-zone:hover { border-color: rgba(34,211,238,0.45); }
+.upload-zone:hover { border-color: rgba(42, 108, 240, 0.5); }
 .upload-icon {
     width: 52px; height: 52px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: rgba(34,211,238,0.06);
-    border: 1px solid rgba(34,211,238,0.18);
+    background: var(--synora-accent-dim);
+    border: 1px solid rgba(42, 108, 240, 0.22);
     border-radius: 14px;
     font-size: 1.25rem;
-    color: var(--synora-cyan);
+    color: var(--synora-accent);
     margin-bottom: 1rem;
 }
 .upload-title { font-family: 'DM Sans', sans-serif; font-weight: 600; color: var(--synora-text); }
@@ -693,8 +771,8 @@ html, body, [class*="css"] {
 }
 
 [data-testid="stFileUploader"] section {
-    background: rgba(3,5,8,0.4) !important;
-    border: 1px dashed rgba(34,211,238,0.18) !important;
+    background: rgba(5, 7, 10, 0.45) !important;
+    border: 1px dashed rgba(42, 108, 240, 0.22) !important;
     border-radius: 16px !important;
     padding: 1.75rem !important;
 }
@@ -725,7 +803,7 @@ html, body, [class*="css"] {
 .empty-state {
     background: var(--synora-glass);
     backdrop-filter: blur(12px);
-    border: 1px dashed rgba(34,211,238,0.18);
+    border: 1px dashed rgba(42, 108, 240, 0.22);
     border-radius: 20px;
     padding: 4rem 3rem;
     text-align: center;
@@ -2267,7 +2345,12 @@ def render_top_nav():
     st.markdown("""
     <div class="synora-topnav">
         <div class="synora-topnav-inner">
-            <div class="synora-topnav-logo">Syn<span>ora</span></div>
+            <div class="synora-topnav-left">
+                <button type="button" class="synora-nav-toggle" aria-label="Toggle navigation">
+                    <span></span><span></span><span></span>
+                </button>
+                <div class="synora-topnav-logo">Syn<span>ora</span></div>
+            </div>
             <nav class="synora-topnav-links">
                 <a href="#">Platform</a>
                 <a href="#">Solutions</a>
@@ -2278,6 +2361,50 @@ def render_top_nav():
         </div>
     </div>
     """, unsafe_allow_html=True)
+
+
+def inject_shell_scripts():
+    """Wire custom nav toggles to Streamlit's native sidebar controls."""
+    components.html(
+        """
+        <script>
+        (function () {
+            const doc = window.parent.document;
+
+            function synoraToggleSidebar() {
+                const collapsed = doc.querySelector('[data-testid="stSidebarCollapsedControl"]');
+                const collapseBtn = doc.querySelector('[data-testid="stSidebarCollapseButton"]');
+                if (collapsed) {
+                    collapsed.click();
+                } else if (collapseBtn) {
+                    collapseBtn.click();
+                }
+            }
+
+            function bindToggleButtons() {
+                doc.querySelectorAll('.synora-nav-toggle').forEach(function (btn) {
+                    if (btn.dataset.synoraBound === '1') {
+                        return;
+                    }
+                    btn.dataset.synoraBound = '1';
+                    btn.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        synoraToggleSidebar();
+                    });
+                });
+            }
+
+            bindToggleButtons();
+            new MutationObserver(bindToggleButtons).observe(doc.body, {
+                childList: true,
+                subtree: true,
+            });
+        })();
+        </script>
+        """,
+        height=0,
+        width=0,
+    )
 
 
 def render_compact_hero():
@@ -2300,7 +2427,13 @@ def render_sidebar() -> str:
     with st.sidebar:
         st.markdown("""
         <div class="synora-sidebar-brand">
-            <p class="synora-logo">Syn<span>ora</span></p>
+            <div class="synora-sidebar-brand-row">
+                <p class="synora-logo">Syn<span>ora</span></p>
+                <button type="button" class="synora-nav-toggle synora-sidebar-collapse"
+                        aria-label="Collapse navigation">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
             <p class="synora-sidebar-tagline">Executive Intelligence for Healthcare Operations</p>
         </div>
         """, unsafe_allow_html=True)
@@ -2320,20 +2453,20 @@ def render_sidebar() -> str:
             st.markdown(f"""
             <div class="synora-sidebar-status">
                 <span class="status-dot status-dot-live"></span>
-                <span style="font-size:0.82rem;color:#F1F5F9;font-weight:600;">Dataset Active</span>
-                <div style="font-size:0.75rem;color:#64748B;margin-top:0.35rem;">{periods} reporting periods loaded</div>
+                <span style="font-size:0.82rem;color:#F5F7FA;font-weight:600;">Dataset Active</span>
+                <div style="font-size:0.75rem;color:#A7B0C0;margin-top:0.35rem;">{periods} reporting periods loaded</div>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown("""
             <div class="synora-sidebar-status">
                 <span class="status-dot status-dot-idle"></span>
-                <span style="font-size:0.82rem;color:#94A3B8;">Awaiting data upload</span>
-                <div style="font-size:0.72rem;color:#64748B;margin-top:0.35rem;">Upload via Operational Intelligence</div>
+                <span style="font-size:0.82rem;color:#A7B0C0;">Awaiting data upload</span>
+                <div style="font-size:0.72rem;color:#6B7588;margin-top:0.35rem;">Upload via Operational Intelligence</div>
             </div>
             """, unsafe_allow_html=True)
         st.markdown(
-            '<p style="font-size:0.68rem;color:#475569;margin-top:2rem;letter-spacing:0.5px;">Synora v1.0 · Enterprise</p>',
+            '<p style="font-size:0.68rem;color:#6B7588;margin-top:2rem;letter-spacing:0.5px;">Synora v1.0 · Enterprise</p>',
             unsafe_allow_html=True,
         )
     return page
@@ -2623,6 +2756,7 @@ def main():
     init_session_state()
     apply_pending_nav()
     render_top_nav()
+    inject_shell_scripts()
     page = render_sidebar()
     route = PAGE_ROUTES[page]
 
