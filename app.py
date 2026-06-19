@@ -62,7 +62,7 @@ html, body, [class*="css"] {
     --synora-warning: #F4B740;
     --synora-critical: #E5484D;
     --nav-height: 64px;
-    --module-bar-height: 46px;
+    --hero-nav-gap: 3.5rem;
 }
 
 .stApp {
@@ -142,7 +142,7 @@ header[data-testid="stHeader"] {
     color: var(--synora-text) !important;
 }
 
-/* ── Shell navigation (top nav + module bar) ── */
+/* ── Primary top navigation ── */
 div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -159,19 +159,21 @@ div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) [data-testid="stHo
     align-items: center !important;
     max-width: 1440px;
     margin: 0 auto;
+    gap: 0.2rem !important;
 }
 div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) .stButton > button {
     width: 100% !important;
-    min-height: 2.25rem !important;
-    padding: 0.35rem 0.5rem !important;
+    min-height: 2.1rem !important;
+    padding: 0.3rem 0.4rem !important;
     border-radius: 8px !important;
-    font-size: 0.82rem !important;
+    font-size: 0.76rem !important;
     font-weight: 500 !important;
     letter-spacing: 0.01em !important;
     background: transparent !important;
     border: 1px solid transparent !important;
     color: var(--synora-muted) !important;
     box-shadow: none !important;
+    white-space: nowrap !important;
 }
 div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) .stButton > button:hover {
     color: var(--synora-text) !important;
@@ -196,51 +198,10 @@ div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-top) [data-testid="colu
     border-color: var(--synora-accent) !important;
 }
 
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-modules) {
-    position: fixed;
-    top: var(--nav-height);
-    left: 0; right: 0;
-    height: var(--module-bar-height);
-    z-index: 999998;
-    background: var(--synora-surface);
-    border-bottom: 1px solid var(--synora-border);
-    padding: 0 0.75rem;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-modules) [data-testid="stHorizontalBlock"] {
-    height: var(--module-bar-height);
-    align-items: center !important;
-    max-width: 1440px;
-    margin: 0 auto;
-    gap: 0.25rem !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-modules) .stButton > button {
-    width: 100% !important;
-    min-height: 2rem !important;
-    padding: 0.25rem 0.35rem !important;
-    border-radius: 6px !important;
-    font-size: 0.72rem !important;
-    font-weight: 500 !important;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    color: var(--synora-muted) !important;
-    box-shadow: none !important;
-    white-space: nowrap !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-modules) .stButton > button:hover {
-    color: var(--synora-text) !important;
-    background: rgba(255, 255, 255, 0.03) !important;
-}
-div[data-testid="stVerticalBlock"]:has(.synora-nav-shell-modules) .stButton > button[kind="primary"] {
-    color: var(--synora-text) !important;
-    background: var(--synora-accent-dim) !important;
-    border-color: rgba(42, 108, 240, 0.28) !important;
-    box-shadow: inset 0 -2px 0 var(--synora-accent) !important;
-}
-
 /* ── Layout ── */
 .main .block-container {
     color: var(--synora-text);
-    padding-top: calc(var(--nav-height) + var(--module-bar-height) + 2rem);
+    padding-top: calc(var(--nav-height) + 1.25rem);
     padding-bottom: 5rem;
     max-width: 1200px;
 }
@@ -260,14 +221,15 @@ section[data-testid="stMain"] {
 /* ── Full-screen hero ── */
 .synora-hero-fullscreen {
     position: relative;
-    min-height: calc(100vh - var(--nav-height) - 1rem);
-    margin: -1rem -1rem 0 -1rem;
-    padding: 7rem 4.5rem 6rem 4.5rem;
+    min-height: calc(100vh - var(--nav-height) - var(--hero-nav-gap));
+    margin: var(--hero-nav-gap) -1rem 0 -1rem;
+    padding: 4rem 3rem 5rem 3rem;
     border-radius: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     border: none;
     background:
         linear-gradient(180deg, rgba(5,7,10,0.15) 0%, rgba(5,7,10,1) 92%),
@@ -286,8 +248,10 @@ section[data-testid="stMain"] {
 .synora-hero-inner {
     position: relative;
     z-index: 2;
-    max-width: 960px;
-    padding-right: 3rem;
+    max-width: 880px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 1.5rem;
 }
 .synora-hero-brand {
     font-family: 'DM Sans', sans-serif;
@@ -872,20 +836,13 @@ PAGE_ROUTES = {
     "Settings": "settings",
 }
 
-TOP_NAV_ITEMS = [
-    ("Platform", "Mission Control"),
-    ("Solutions", "Operational Intelligence"),
-    ("Technology", "Executive Intelligence"),
-    ("About", "Board Ready Reports"),
-]
-
-MODULE_BAR_PAGES = [
-    "Mission Control",
-    "Operational Intelligence",
-    "ED Operations",
-    "Financial Intelligence",
-    "Executive Intelligence",
-    "Board Ready Reports",
+PRIMARY_NAV_ITEMS = [
+    ("Mission Control", "Mission Control"),
+    ("Operational Intelligence", "Operational Intelligence"),
+    ("ED Operations", "ED Operations"),
+    ("Financial Intelligence", "Financial Intelligence"),
+    ("Executive Intelligence", "Executive Intelligence"),
+    ("Board Reports", "Board Ready Reports"),
 ]
 
 NAV_ICONS = {
@@ -2270,24 +2227,17 @@ def _nav_button(label: str, page: str, key: str):
 
 def render_top_nav():
     st.markdown('<div class="synora-nav-shell-top"></div>', unsafe_allow_html=True)
-    logo, c1, c2, c3, c4, c5 = st.columns([1.35, 0.75, 0.85, 0.95, 0.75, 1.05])
+    logo, c1, c2, c3, c4, c5, c6, c7 = st.columns(
+        [1.05, 0.92, 1.12, 0.82, 1.02, 1.02, 0.82, 0.95]
+    )
     with logo:
         st.markdown('<div class="synora-topnav-logo">Syn<span>ora</span></div>', unsafe_allow_html=True)
-    nav_cols = [c1, c2, c3, c4]
-    for col, (label, page) in zip(nav_cols, TOP_NAV_ITEMS):
+    nav_cols = [c1, c2, c3, c4, c5, c6]
+    for col, (label, page) in zip(nav_cols, PRIMARY_NAV_ITEMS):
         with col:
-            _nav_button(label, page, f"topnav_{label.lower().replace(' ', '_')}")
-    with c5:
-        _nav_button("Request Demo", "Board Ready Reports", "topnav_request_demo")
-
-
-def render_module_bar():
-    st.markdown('<div class="synora-nav-shell-modules"></div>', unsafe_allow_html=True)
-    weights = [1.05, 1.35, 0.95, 1.2, 1.2, 1.15]
-    cols = st.columns(weights)
-    for col, page in zip(cols, MODULE_BAR_PAGES):
-        with col:
-            _nav_button(page, page, f"module_{page.lower().replace(' ', '_')}")
+            _nav_button(label, page, f"nav_{page.lower().replace(' ', '_')}")
+    with c7:
+        _nav_button("Request Demo", "Board Ready Reports", "nav_request_demo")
 
 
 def _compute_operational_health(alerts: list) -> int:
@@ -2433,7 +2383,7 @@ def render_empty_state(message: str = "Upload a KPI dataset to unlock this view.
         <p><strong>No data loaded</strong></p>
         <p style="margin-top:0.5rem;">{message}</p>
         <p style="margin-top:1.25rem;font-size:0.85rem;color:#64748B;">
-            Go to <strong style="color:#2A6CF0;">Operational Intelligence</strong> in the module bar to get started.
+            Go to <strong style="color:#2A6CF0;">Operational Intelligence</strong> in the navigation bar to get started.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -2698,7 +2648,6 @@ def main():
     init_session_state()
     apply_pending_nav()
     render_top_nav()
-    render_module_bar()
     page = st.session_state.synora_nav
     route = PAGE_ROUTES.get(page, "overview")
 
