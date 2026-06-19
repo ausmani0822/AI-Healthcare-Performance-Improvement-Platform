@@ -1,6 +1,6 @@
 """
-Synora — AI Copilot for Healthcare Operations
-Hospital executive dashboard for KPI analysis and AI-driven insights.
+Synora — Executive Intelligence for Healthcare Operations
+Executive dashboard for KPI analysis, operational intelligence, and decision support.
 """
 from typing import Optional
 import re
@@ -25,7 +25,7 @@ from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 # PAGE CONFIGURATION
 # ─────────────────────────────────────────────
 st.set_page_config(
-    page_title="Synora · Healthcare AI Platform",
+    page_title="Synora · Executive Intelligence for Healthcare Operations",
     page_icon="◆",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -1530,8 +1530,8 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
         rightMargin=0.85 * inch,
         topMargin=1.0 * inch,
         bottomMargin=0.9 * inch,
-        title="Synora Operations Report",
-        author="Synora — AI Copilot for Healthcare Operations",
+        title="Synora Executive Intelligence Report",
+        author="Synora — Executive Intelligence for Healthcare Operations",
     )
 
     # ── Color palette
@@ -1636,7 +1636,7 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
     ]))
     story.append(cover_table)
 
-    title_data = [[Paragraph("Healthcare Operations<br/>Brief", cover_title)]]
+    title_data = [[Paragraph("Synora<br/>Executive Intelligence Report", cover_title)]]
     title_table = Table(title_data, colWidths=[6.3 * inch])
     title_table.setStyle(TableStyle([
         ("BACKGROUND",   (0, 0), (-1, -1), MIDBLUE),
@@ -1648,7 +1648,7 @@ def generate_executive_pdf(df: pd.DataFrame, alerts: list[dict], report_text: st
     story.append(title_table)
 
     sub_data = [[
-        Paragraph("Prepared by: Synora — AI Copilot for Healthcare Operations", cover_sub),
+        Paragraph("Prepared by: Synora — Executive Intelligence for Healthcare Operations", cover_sub),
         Paragraph(f"Report Date: {datetime.now().strftime('%B %d, %Y')}", cover_sub),
         Paragraph(f"Data Period: {date_range}", cover_sub),
         Paragraph(f"Reporting Periods Analyzed: {len(df)}", cover_sub),
@@ -1840,21 +1840,21 @@ def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
     """Render the AI Consultant Report section with a generate button."""
 
     st.markdown('<div class="page-header"><h2 class="page-title">Reports</h2>'
-                '<p class="page-subtitle">Generate and download Synora executive operations briefs</p></div>',
+                '<p class="page-subtitle">Generate and download Synora executive intelligence reports</p></div>',
                 unsafe_allow_html=True)
 
     with st.container(border=True):
         col_desc, col_btn = st.columns([3, 1])
         with col_desc:
-            st.markdown("**Operations Brief Generator**")
+            st.markdown("**Executive Intelligence Report Generator**")
             st.markdown(
-                "Synora analyzes your KPI data and produces a structured operations brief for COO "
+                "Synora analyzes your KPI data and produces a structured executive intelligence report for COO "
                 "or Board Quality Committee review — including root cause analysis, financial impact "
                 "estimates, and a 30-60-90 day action plan."
             )
         with col_btn:
             st.markdown("<br>", unsafe_allow_html=True)
-            generate = st.button("Generate Operations Brief", type="primary", use_container_width=True)
+            generate = st.button("Generate Executive Report", type="primary", use_container_width=True)
 
     if generate:
         with st.spinner("Synora is analyzing your KPI data..."):
@@ -1875,10 +1875,10 @@ def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
             </div>
             <div style="font-family:'DM Sans',sans-serif; font-size:1.6rem; font-weight:700;
                         color:#F1F5F9; margin-bottom:0.3rem; letter-spacing:-0.03em;">
-                Healthcare Operations Brief
+                Synora Executive Intelligence Report
             </div>
             <div style="font-size:0.82rem; color:#94A3B8;">
-                Prepared by Synora &nbsp;·&nbsp; {datetime.now().strftime("%B %d, %Y")}
+                Executive Intelligence for Healthcare Operations &nbsp;·&nbsp; {datetime.now().strftime("%B %d, %Y")}
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -1906,7 +1906,7 @@ def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
         st.download_button(
             label="Download Executive PDF",
             data=pdf_bytes,
-            file_name=f"synora_operations_report_{datetime.now().strftime('%Y%m%d')}.pdf",
+            file_name=f"synora_executive_intelligence_report_{datetime.now().strftime('%Y%m%d')}.pdf",
             mime="application/pdf",
             type="primary",
         )
@@ -1925,12 +1925,15 @@ def render_portfolio_demo():
         <div style="font-size:0.65rem; font-weight:700; letter-spacing:2px; text-transform:uppercase;
                     color:#22D3EE; margin-bottom:0.6rem;">Built for Healthcare Operations Leaders</div>
         <div style="font-family:'DM Sans',sans-serif; font-size:2rem; font-weight:700;
-                    color:#F1F5F9; line-height:1.2; margin-bottom:0.6rem; letter-spacing:-0.03em;">
-            Synora Platform
+                    color:#F1F5F9; line-height:1.2; margin-bottom:0.35rem; letter-spacing:-0.03em;">
+            Synora
+        </div>
+        <div style="font-size:0.85rem; font-weight:600; color:#22D3EE; margin-bottom:0.75rem; letter-spacing:0.02em;">
+            Executive Intelligence for Healthcare Operations
         </div>
         <div style="font-size:0.92rem; color:#94A3B8; max-width:680px; line-height:1.65;">
-            Turn hospital KPI data into executive intelligence, financial insight, and action plans —
-            in under 60 seconds.
+            Transform healthcare data into executive action through AI-powered operational intelligence,
+            predictive analytics, and executive decision support.
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -2100,7 +2103,7 @@ Synora produces an equivalent first-pass analysis in under a minute, enabling le
             <div style="font-size:0.65rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
                         color:#64748B; margin-bottom:0.4rem;">Product</div>
             <div style="font-size:0.85rem; color:#F1F5F9; font-weight:500;">
-                Synora — AI Copilot for Healthcare Operations
+                Synora — Executive Intelligence for Healthcare Operations
             </div>
         </div>
     </div>
@@ -2170,12 +2173,12 @@ def render_hero():
     st.markdown(f"""
     <div class="synora-hero">
         <div class="synora-hero-inner">
-            <div class="synora-hero-badge">◆ Healthcare AI Platform</div>
+            <div class="synora-hero-badge">◆ Executive Intelligence</div>
             <h1 class="synora-hero-title">Synora</h1>
-            <p class="synora-hero-subtitle">AI Copilot for Healthcare Operations</p>
+            <p class="synora-hero-subtitle">Executive Intelligence for Healthcare Operations</p>
             <p class="synora-hero-desc">
-                Transform hospital KPI data into executive intelligence, financial insight,
-                and prioritized action plans — built for COOs, CMOs, and operations leaders.
+                Transform healthcare data into executive action through AI-powered operational intelligence,
+                predictive analytics, and executive decision support.
             </p>
             {stats_html}
         </div>
@@ -2189,7 +2192,7 @@ def render_sidebar() -> str:
         <div class="synora-sidebar-brand">
             <div class="synora-logo-mark">◆</div>
             <p class="synora-logo">Syn<span>ora</span></p>
-            <p class="synora-sidebar-tag">Healthcare AI Platform</p>
+            <p class="synora-sidebar-tag">Executive Intelligence for Healthcare Operations</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -2226,7 +2229,7 @@ def render_sidebar() -> str:
     return page
 
 
-def parse_uploaded_csv(uploaded_file) -> pd.DataFrame | None:
+def parse_uploaded_csv(uploaded_file) -> Optional[pd.DataFrame]:
     try:
         df = pd.read_csv(uploaded_file)
     except Exception as e:
@@ -2266,8 +2269,8 @@ def render_empty_state(message: str = "Upload a KPI dataset to unlock this view.
 
 def render_synora_footer():
     st.markdown(
-        f'<div class="synora-footer">Synora · Healthcare AI Platform · '
-        f'AI Copilot for Healthcare Operations · {datetime.now().strftime("%B %d, %Y")}</div>',
+        f'<div class="synora-footer">Synora · Executive Intelligence for Healthcare Operations · '
+        f'{datetime.now().strftime("%B %d, %Y")}</div>',
         unsafe_allow_html=True,
     )
 
@@ -2399,7 +2402,7 @@ def render_page_overview():
 
 def render_page_upload():
     st.markdown('<div class="page-header"><h2 class="page-title">Upload Data</h2>'
-                '<p class="page-subtitle">Import hospital KPI data to power Synora analytics and executive reporting</p></div>',
+                '<p class="page-subtitle">Import healthcare operations data to power Synora executive intelligence</p></div>',
                 unsafe_allow_html=True)
 
     st.markdown('<div class="upload-panel">', unsafe_allow_html=True)
@@ -2468,7 +2471,7 @@ def render_page_ed_operations(df: pd.DataFrame, alerts: list[dict]):
 
 def render_page_ai_advisor(df: pd.DataFrame, alerts: list[dict]):
     st.markdown('<div class="page-header"><h2 class="page-title">AI Advisor</h2>'
-                '<p class="page-subtitle">Synora executive summary and prioritized recommendations</p></div>',
+                '<p class="page-subtitle">Synora executive intelligence summary and prioritized recommendations</p></div>',
                 unsafe_allow_html=True)
     st.markdown('<div class="section-header">Executive Summary</div>', unsafe_allow_html=True)
     render_executive_summary(df, alerts)
