@@ -5,7 +5,6 @@ Executive dashboard for KPI analysis, operational intelligence, and decision sup
 from typing import Optional
 import re
 import streamlit as st
-import streamlit.components.v1 as components
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
@@ -189,6 +188,8 @@ header[data-testid="stHeader"] {
     border-right: 1px solid var(--synora-border) !important;
     min-width: var(--sidebar-width) !important;
     max-width: var(--sidebar-width) !important;
+    width: var(--sidebar-width) !important;
+    transition: min-width 0.22s ease, max-width 0.22s ease, width 0.22s ease, opacity 0.22s ease;
 }
 [data-testid="stSidebar"] > div:first-child {
     padding: calc(var(--nav-height) + 0.75rem) 1rem 2.5rem 1rem;
@@ -250,20 +251,77 @@ header[data-testid="stHeader"] {
 }
 
 .synora-sidebar-brand {
-    padding: 0 0.35rem 1.75rem 0.35rem;
-    margin-bottom: 0.75rem;
+    padding: 0 0.35rem 0 0.35rem;
+    margin-bottom: 0;
+    border-bottom: none;
+}
+[data-testid="stSidebar"] > div:first-child > div[data-testid="stVerticalBlock"] > div[data-testid="stHorizontalBlock"]:first-of-type {
     border-bottom: 1px solid var(--synora-border);
+    padding-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    align-items: flex-start !important;
 }
-.synora-sidebar-brand-row {
+[data-testid="stSidebar"] [data-testid="column"]:has(.synora-sidebar-toggle-anchor) {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 0.65rem;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-top: 0.15rem;
 }
-.synora-sidebar-collapse {
-    width: 34px;
-    height: 34px;
+[data-testid="stSidebar"] [data-testid="column"]:has(.synora-sidebar-toggle-anchor) .stButton > button {
+    width: 34px !important;
+    min-width: 34px !important;
+    height: 34px !important;
+    min-height: 34px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--synora-border) !important;
+    background: transparent !important;
+    color: var(--synora-muted) !important;
+    font-size: 1rem !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+}
+[data-testid="stSidebar"] [data-testid="column"]:has(.synora-sidebar-toggle-anchor) .stButton > button:hover {
+    background: var(--synora-accent-dim) !important;
+    border-color: rgba(42, 108, 240, 0.35) !important;
+    color: var(--synora-text) !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-nav-toggle-anchor) {
+    position: fixed;
+    top: calc(var(--nav-height) / 2 - 19px);
+    left: 1.25rem;
+    z-index: 1000000;
+    width: 38px !important;
+    min-width: 38px !important;
+    max-width: 38px !important;
+    height: 38px !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-nav-toggle-anchor) .stButton {
+    width: 100%;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-nav-toggle-anchor) .stButton > button {
+    width: 38px !important;
+    min-width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    padding: 0 !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--synora-border) !important;
+    background: transparent !important;
+    color: var(--synora-muted) !important;
+    font-size: 1.1rem !important;
+    line-height: 1 !important;
+    box-shadow: none !important;
+}
+div[data-testid="stVerticalBlock"]:has(.synora-nav-toggle-anchor) .stButton > button:hover {
+    background: var(--synora-accent-dim) !important;
+    border-color: rgba(42, 108, 240, 0.35) !important;
+    color: var(--synora-text) !important;
+}
+.synora-topnav-toggle-spacer {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
 }
 .synora-logo {
     font-family: 'DM Sans', sans-serif;
@@ -2235,6 +2293,55 @@ def init_session_state():
         st.session_state.nav_pending = None
     if "show_platform" not in st.session_state:
         st.session_state.show_platform = False
+    if "sidebar_open" not in st.session_state:
+        st.session_state.sidebar_open = True
+
+
+def inject_sidebar_layout_css():
+    """Apply sidebar visibility from session state (not Streamlit native toggle)."""
+    if st.session_state.sidebar_open:
+        st.markdown(
+            """
+            <style>
+            [data-testid="stSidebar"] {
+                min-width: var(--sidebar-width) !important;
+                max-width: var(--sidebar-width) !important;
+                width: var(--sidebar-width) !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                pointer-events: auto !important;
+                border-right: 1px solid var(--synora-border) !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+    else:
+        st.markdown(
+            """
+            <style>
+            [data-testid="stSidebar"] {
+                min-width: 0 !important;
+                max-width: 0 !important;
+                width: 0 !important;
+                opacity: 0 !important;
+                visibility: hidden !important;
+                pointer-events: none !important;
+                border-right: none !important;
+                overflow: hidden !important;
+            }
+            [data-testid="stSidebar"] > div:first-child {
+                padding: 0 !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
+
+def toggle_sidebar():
+    st.session_state.sidebar_open = not st.session_state.sidebar_open
+    st.rerun()
 
 
 def apply_pending_nav():
@@ -2341,14 +2448,18 @@ def render_hero_ctas():
             st.rerun()
 
 
+def render_nav_toggle():
+    st.markdown('<div class="synora-nav-toggle-anchor"></div>', unsafe_allow_html=True)
+    if st.button("☰", key="synora_sidebar_toggle", help="Toggle navigation"):
+        toggle_sidebar()
+
+
 def render_top_nav():
     st.markdown("""
     <div class="synora-topnav">
         <div class="synora-topnav-inner">
             <div class="synora-topnav-left">
-                <button type="button" class="synora-nav-toggle" aria-label="Toggle navigation">
-                    <span></span><span></span><span></span>
-                </button>
+                <div class="synora-topnav-toggle-spacer"></div>
                 <div class="synora-topnav-logo">Syn<span>ora</span></div>
             </div>
             <nav class="synora-topnav-links">
@@ -2361,50 +2472,6 @@ def render_top_nav():
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-
-def inject_shell_scripts():
-    """Wire custom nav toggles to Streamlit's native sidebar controls."""
-    components.html(
-        """
-        <script>
-        (function () {
-            const doc = window.parent.document;
-
-            function synoraToggleSidebar() {
-                const collapsed = doc.querySelector('[data-testid="stSidebarCollapsedControl"]');
-                const collapseBtn = doc.querySelector('[data-testid="stSidebarCollapseButton"]');
-                if (collapsed) {
-                    collapsed.click();
-                } else if (collapseBtn) {
-                    collapseBtn.click();
-                }
-            }
-
-            function bindToggleButtons() {
-                doc.querySelectorAll('.synora-nav-toggle').forEach(function (btn) {
-                    if (btn.dataset.synoraBound === '1') {
-                        return;
-                    }
-                    btn.dataset.synoraBound = '1';
-                    btn.addEventListener('click', function (event) {
-                        event.preventDefault();
-                        synoraToggleSidebar();
-                    });
-                });
-            }
-
-            bindToggleButtons();
-            new MutationObserver(bindToggleButtons).observe(doc.body, {
-                childList: true,
-                subtree: true,
-            });
-        })();
-        </script>
-        """,
-        height=0,
-        width=0,
-    )
 
 
 def render_compact_hero():
@@ -2425,18 +2492,21 @@ def render_compact_hero():
 
 def render_sidebar() -> str:
     with st.sidebar:
-        st.markdown("""
-        <div class="synora-sidebar-brand">
-            <div class="synora-sidebar-brand-row">
-                <p class="synora-logo">Syn<span>ora</span></p>
-                <button type="button" class="synora-nav-toggle synora-sidebar-collapse"
-                        aria-label="Collapse navigation">
-                    <span></span><span></span><span></span>
-                </button>
-            </div>
-            <p class="synora-sidebar-tagline">Executive Intelligence for Healthcare Operations</p>
-        </div>
-        """, unsafe_allow_html=True)
+        brand_logo, brand_toggle = st.columns([5, 1])
+        with brand_logo:
+            st.markdown(
+                """
+                <div class="synora-sidebar-brand">
+                    <p class="synora-logo">Syn<span>ora</span></p>
+                    <p class="synora-sidebar-tagline">Executive Intelligence for Healthcare Operations</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+        with brand_toggle:
+            st.markdown('<div class="synora-sidebar-toggle-anchor"></div>', unsafe_allow_html=True)
+            if st.button("☰", key="synora_sidebar_collapse", help="Toggle navigation"):
+                toggle_sidebar()
 
         st.markdown('<p class="synora-nav-label">Modules</p>', unsafe_allow_html=True)
         page = st.radio(
@@ -2755,8 +2825,9 @@ def render_page_reports(df: pd.DataFrame, alerts: list[dict]):
 def main():
     init_session_state()
     apply_pending_nav()
+    inject_sidebar_layout_css()
+    render_nav_toggle()
     render_top_nav()
-    inject_shell_scripts()
     page = render_sidebar()
     route = PAGE_ROUTES[page]
 
