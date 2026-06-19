@@ -32,56 +32,122 @@ st.set_page_config(
 )
 
 # ─────────────────────────────────────────────
-# CUSTOM CSS — Premium dark healthcare SaaS
+# CUSTOM CSS — Enterprise SaaS shell
 # ─────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@300;400;500;600;700&display=swap');
 
 html, body, [class*="css"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 :root {
-    --synora-bg: #060912;
-    --synora-surface: #0D1321;
-    --synora-elevated: #141C2E;
-    --synora-card: #111827;
-    --synora-border: rgba(148, 163, 184, 0.12);
+    --synora-bg: #030508;
+    --synora-surface: #0A0E17;
+    --synora-elevated: #111827;
+    --synora-glass: rgba(17, 24, 39, 0.72);
+    --synora-border: rgba(148, 163, 184, 0.1);
+    --synora-border-hover: rgba(34, 211, 238, 0.35);
     --synora-cyan: #22D3EE;
-    --synora-indigo: #818CF8;
-    --synora-text: #F1F5F9;
+    --synora-cyan-dim: rgba(34, 211, 238, 0.15);
+    --synora-text: #F8FAFC;
     --synora-muted: #94A3B8;
     --synora-dim: #64748B;
     --synora-success: #34D399;
     --synora-warning: #FBBF24;
     --synora-critical: #F87171;
+    --nav-height: 64px;
 }
 
 .stApp {
-    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(34, 211, 238, 0.08), transparent),
-                radial-gradient(ellipse 60% 40% at 100% 0%, rgba(129, 140, 248, 0.06), transparent),
-                var(--synora-bg);
+    background: var(--synora-bg);
     color: var(--synora-text);
 }
 
-.main .block-container {
-    color: var(--synora-text);
-    padding-top: 2rem;
-    padding-bottom: 3rem;
-    max-width: 1280px;
-}
-
-/* Hide Streamlit chrome */
 #MainMenu, footer, header[data-testid="stHeader"] { visibility: hidden; height: 0; }
 
-/* Sidebar */
+/* ── Sticky top navigation ── */
+.synora-topnav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-height);
+    z-index: 999999;
+    background: rgba(3, 5, 8, 0.75);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border-bottom: 1px solid var(--synora-border);
+}
+.synora-topnav-inner {
+    max-width: 1440px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.synora-topnav-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--synora-text);
+    letter-spacing: -0.03em;
+}
+.synora-topnav-logo span {
+    background: linear-gradient(135deg, #22D3EE, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.synora-topnav-links {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+.synora-topnav-links a {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--synora-muted);
+    text-decoration: none;
+    letter-spacing: 0.01em;
+    transition: color 0.2s ease;
+}
+.synora-topnav-links a:hover { color: var(--synora-text); }
+.synora-topnav-cta {
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    color: var(--synora-cyan) !important;
+    border: 1px solid rgba(34, 211, 238, 0.4) !important;
+    padding: 0.45rem 1rem !important;
+    border-radius: 999px !important;
+    background: rgba(34, 211, 238, 0.06) !important;
+    transition: all 0.2s ease !important;
+}
+.synora-topnav-cta:hover {
+    background: rgba(34, 211, 238, 0.12) !important;
+    border-color: var(--synora-cyan) !important;
+    color: var(--synora-text) !important;
+}
+
+/* ── Layout ── */
+.main .block-container {
+    color: var(--synora-text);
+    padding-top: calc(var(--nav-height) + 1.5rem);
+    padding-bottom: 4rem;
+    max-width: 1360px;
+}
+[data-testid="stHorizontalBlock"] { gap: 1.25rem; }
+[data-testid="column"] { padding: 0 0.2rem; }
+
+/* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #080D18 0%, #0D1321 50%, #0A1020 100%);
+    background: rgba(6, 9, 14, 0.95) !important;
     border-right: 1px solid var(--synora-border);
+    backdrop-filter: blur(12px);
 }
 [data-testid="stSidebar"] > div:first-child {
-    padding-top: 1.75rem;
+    padding: calc(var(--nav-height) + 0.5rem) 1rem 2rem 1rem;
 }
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
@@ -90,42 +156,362 @@ html, body, [class*="css"] {
 }
 [data-testid="stSidebar"] hr {
     border-color: var(--synora-border) !important;
-    margin: 1.25rem 0 !important;
+    margin: 1.5rem 0 !important;
+}
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] {
+    gap: 0.15rem;
 }
 [data-testid="stSidebar"] .stRadio label {
     color: var(--synora-muted) !important;
-    font-weight: 500;
-    font-size: 0.875rem !important;
-}
-[data-testid="stSidebar"] .stRadio div[role="radiogroup"] {
-    gap: 0.25rem;
+    font-weight: 500 !important;
+    font-size: 0.84rem !important;
+    width: 100%;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
     background: transparent;
     border: 1px solid transparent;
     border-radius: 10px;
-    padding: 0.55rem 0.75rem;
+    padding: 0.65rem 0.85rem;
     margin: 0;
-    transition: all 0.18s ease;
+    transition: all 0.2s ease;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-    background: rgba(34, 211, 238, 0.06);
-    border-color: rgba(34, 211, 238, 0.15);
+    background: rgba(255, 255, 255, 0.03);
+    border-color: var(--synora-border);
     color: var(--synora-text) !important;
 }
-[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label[data-checked="true"],
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) {
-    background: rgba(34, 211, 238, 0.1) !important;
-    border-color: rgba(34, 211, 238, 0.25) !important;
+    background: rgba(34, 211, 238, 0.08) !important;
+    border-color: rgba(34, 211, 238, 0.22) !important;
     color: var(--synora-cyan) !important;
+    box-shadow: inset 0 0 20px rgba(34, 211, 238, 0.05);
 }
 
-/* Global markdown */
+.synora-sidebar-brand {
+    padding: 0 0.25rem 1.75rem 0.25rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--synora-border);
+}
+.synora-logo {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--synora-text);
+    letter-spacing: -0.045em;
+    margin: 0 0 0.75rem 0;
+    line-height: 1;
+}
+.synora-logo span {
+    background: linear-gradient(135deg, #22D3EE, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.synora-sidebar-tagline {
+    font-size: 0.78rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--synora-dim);
+    margin: 0;
+}
+.synora-nav-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--synora-dim);
+    margin: 0.5rem 0 0.75rem 0.35rem;
+}
+.synora-sidebar-status {
+    background: var(--synora-glass);
+    border: 1px solid var(--synora-border);
+    border-radius: 12px;
+    padding: 1rem 1.1rem;
+    backdrop-filter: blur(8px);
+}
+.synora-sidebar-status .status-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 0.45rem;
+    vertical-align: middle;
+}
+.status-dot-live { background: var(--synora-success); box-shadow: 0 0 10px rgba(52,211,153,0.6); }
+.status-dot-idle { background: var(--synora-dim); }
+
+/* ── Full-screen hero ── */
+.synora-hero-fullscreen {
+    position: relative;
+    min-height: calc(100vh - var(--nav-height) - 3rem);
+    margin: -0.5rem -1rem 0 -1rem;
+    padding: 4.5rem 3.5rem 5rem 3.5rem;
+    border-radius: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border: none;
+    background:
+        radial-gradient(ellipse 70% 55% at 15% 20%, rgba(34, 211, 238, 0.09), transparent 55%),
+        radial-gradient(ellipse 50% 45% at 85% 75%, rgba(129, 140, 248, 0.07), transparent 50%),
+        linear-gradient(180deg, rgba(3,5,8,0.3) 0%, rgba(3,5,8,0.95) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(34,211,238,0.025) 59px, rgba(34,211,238,0.025) 60px),
+        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(34,211,238,0.025) 59px, rgba(34,211,238,0.025) 60px),
+        #030508;
+}
+.synora-hero-fullscreen::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(34,211,238,0.06) 0%, transparent 45%);
+    pointer-events: none;
+}
+.synora-hero-fullscreen::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 120px;
+    background: linear-gradient(transparent, var(--synora-bg));
+    pointer-events: none;
+}
+.synora-hero-inner { position: relative; z-index: 2; max-width: 820px; }
+.synora-hero-eyebrow {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--synora-cyan);
+    margin-bottom: 1.5rem;
+}
+.synora-hero-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 5.5rem);
+    font-weight: 700;
+    color: var(--synora-text);
+    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.045em;
+    line-height: 0.95;
+}
+.synora-hero-brand-line {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: var(--synora-muted);
+    margin: 0 0 1.25rem 0;
+    letter-spacing: -0.01em;
+}
+.synora-hero-tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.65rem;
+    font-weight: 500;
+    color: var(--synora-text);
+    margin: 0 0 1rem 0;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    max-width: 640px;
+}
+.synora-hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--synora-dim);
+    margin: 0 0 2.5rem 0;
+    max-width: 580px;
+    line-height: 1.7;
+}
+.synora-hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding-top: 2rem;
+    margin-top: 2rem;
+    border-top: 1px solid var(--synora-border);
+}
+.synora-hero-stat-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.65rem;
+    font-weight: 700;
+    color: var(--synora-text);
+    letter-spacing: -0.02em;
+}
+.synora-hero-stat-label {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--synora-dim);
+    margin-top: 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* Hero CTA row — pulled into hero visually */
+.synora-hero-cta-row {
+    margin-top: -1rem !important;
+    padding: 0 3.5rem 2rem 3.5rem !important;
+    position: relative;
+    z-index: 3;
+}
+
+/* Compact hero for inner pages */
+.synora-hero-compact {
+    background: var(--synora-glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--synora-border);
+    border-radius: 20px;
+    padding: 2.5rem 3rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+}
+.synora-hero-compact .synora-hero-title { font-size: 2.25rem; }
+
+/* ── Page headers ── */
+.page-header {
+    margin: 1rem 0 3rem 0;
+    padding: 0 0 2rem 0;
+    border-bottom: 1px solid var(--synora-border);
+}
+.page-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 700;
+    color: var(--synora-text);
+    margin: 0 0 0.65rem 0;
+    letter-spacing: -0.035em;
+}
+.page-subtitle {
+    font-size: 1rem;
+    color: var(--synora-muted);
+    margin: 0;
+    line-height: 1.65;
+    max-width: 680px;
+}
+.section-header {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--synora-cyan);
+    margin: 3rem 0 1.5rem 0;
+}
+
+/* ── Executive KPI cards ── */
+.exec-kpi-card {
+    position: relative;
+    background: var(--synora-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--synora-border);
+    border-radius: 18px;
+    padding: 1.75rem 1.5rem;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.exec-kpi-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--synora-border-hover);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 40px rgba(34,211,238,0.06);
+}
+.exec-kpi-glow {
+    position: absolute;
+    top: -40%; right: -20%;
+    width: 160px; height: 160px;
+    background: radial-gradient(circle, rgba(34,211,238,0.12), transparent 70%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.exec-kpi-card:hover .exec-kpi-glow { opacity: 1; }
+.exec-kpi-header {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 1.25rem;
+}
+.exec-kpi-icon {
+    width: 36px; height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(34,211,238,0.08);
+    border: 1px solid rgba(34,211,238,0.18);
+    border-radius: 10px;
+    font-size: 0.95rem;
+    color: var(--synora-cyan);
+}
+.exec-kpi-title {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--synora-dim);
+}
+.exec-kpi-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 2.35rem;
+    font-weight: 700;
+    color: var(--synora-text);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    margin-bottom: 0.35rem;
+}
+.exec-kpi-unit {
+    font-size: 0.78rem;
+    color: var(--synora-muted);
+    margin-bottom: 1.25rem;
+}
+.exec-kpi-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.exec-kpi-trend {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+.trend-positive { color: var(--synora-success); }
+.trend-negative { color: var(--synora-critical); }
+.trend-neutral { color: var(--synora-dim); }
+
+.metric-status {
+    display: inline-block;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.28rem 0.65rem;
+    border-radius: 999px;
+}
+.status-success { background: rgba(52,211,153,0.1); color: #34D399; border: 1px solid rgba(52,211,153,0.22); }
+.status-warning { background: rgba(251,191,36,0.1); color: #FBBF24; border: 1px solid rgba(251,191,36,0.22); }
+.status-critical { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.22); }
+.status-neutral { background: rgba(148,163,184,0.08); color: var(--synora-muted); border: 1px solid var(--synora-border); }
+
+/* Legacy metric-card alias */
+.metric-card { display: none; }
+
+/* ── Glass cards ── */
+[data-testid="stVerticalBlockBorderWrapper"] {
+    background: var(--synora-glass) !important;
+    border-color: var(--synora-border) !important;
+    border-radius: 18px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    padding: 0.75rem !important;
+    margin-bottom: 1rem;
+}
+[data-testid="stVerticalBlockBorderWrapper"] p,
+[data-testid="stVerticalBlockBorderWrapper"] li,
+[data-testid="stVerticalBlockBorderWrapper"] span { color: var(--synora-muted) !important; }
+[data-testid="stVerticalBlockBorderWrapper"] h1,
+[data-testid="stVerticalBlockBorderWrapper"] h2,
+[data-testid="stVerticalBlockBorderWrapper"] h3,
+[data-testid="stVerticalBlockBorderWrapper"] h4 { color: var(--synora-text) !important; }
+
 [data-testid="stMarkdownContainer"] p,
 [data-testid="stMarkdownContainer"] li,
-[data-testid="stMarkdownContainer"] span {
-    color: var(--synora-muted);
-}
+[data-testid="stMarkdownContainer"] span { color: var(--synora-muted); }
 [data-testid="stMarkdownContainer"] h1,
 [data-testid="stMarkdownContainer"] h2,
 [data-testid="stMarkdownContainer"] h3,
@@ -135,654 +521,213 @@ html, body, [class*="css"] {
     letter-spacing: -0.02em;
 }
 [data-testid="stMarkdownContainer"] strong,
-[data-testid="stMarkdownContainer"] b {
-    color: var(--synora-text);
-}
+[data-testid="stMarkdownContainer"] b { color: var(--synora-text); }
 
-[data-testid="stVerticalBlockBorderWrapper"] {
-    background: var(--synora-elevated) !important;
-    border-color: var(--synora-border) !important;
-    border-radius: 14px;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
-}
-[data-testid="stVerticalBlockBorderWrapper"] p,
-[data-testid="stVerticalBlockBorderWrapper"] li,
-[data-testid="stVerticalBlockBorderWrapper"] span {
-    color: var(--synora-muted) !important;
-}
-[data-testid="stVerticalBlockBorderWrapper"] h1,
-[data-testid="stVerticalBlockBorderWrapper"] h2,
-[data-testid="stVerticalBlockBorderWrapper"] h3,
-[data-testid="stVerticalBlockBorderWrapper"] h4 {
-    color: var(--synora-text) !important;
-}
-
-/* Sidebar brand */
-.synora-sidebar-brand {
-    padding: 0 0 1.5rem 0;
-    margin-bottom: 0.25rem;
-}
-.synora-logo-mark {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    background: linear-gradient(135deg, rgba(34,211,238,0.2), rgba(129,140,248,0.2));
-    border: 1px solid rgba(34, 211, 238, 0.3);
-    border-radius: 10px;
-    font-size: 1rem;
-    color: var(--synora-cyan);
-    margin-bottom: 0.85rem;
-}
-.synora-logo {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    letter-spacing: -0.03em;
-    margin: 0;
-    line-height: 1.1;
-}
-.synora-logo span {
-    background: linear-gradient(135deg, #22D3EE, #818CF8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-.synora-sidebar-tag {
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 1.4px;
-    text-transform: uppercase;
-    color: var(--synora-dim);
-    margin-top: 0.4rem;
-}
-.synora-nav-label {
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
-    color: var(--synora-dim);
-    margin: 0.5rem 0 0.75rem 0;
-}
-.synora-sidebar-status {
-    background: rgba(17, 24, 39, 0.6);
+.summary-card, .report-section, .rec-card, .app-card {
+    background: var(--synora-glass);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--synora-border);
-    border-radius: 10px;
-    padding: 0.85rem 1rem;
-    margin-top: 0.5rem;
-}
-.synora-sidebar-status .status-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    margin-right: 0.4rem;
-    vertical-align: middle;
-}
-.status-dot-live { background: var(--synora-success); box-shadow: 0 0 8px rgba(52,211,153,0.5); }
-.status-dot-idle { background: var(--synora-dim); }
-
-/* Hero */
-.synora-hero {
-    background: linear-gradient(135deg, #0A1020 0%, #111827 45%, #0D1528 100%);
-    border-radius: 20px;
-    padding: 3rem 3.25rem;
-    margin-bottom: 2rem;
-    position: relative;
-    overflow: hidden;
-    border: 1px solid rgba(34, 211, 238, 0.15);
-    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35);
-}
-.synora-hero::before {
-    content: '';
-    position: absolute;
-    top: -40%;
-    right: -8%;
-    width: 480px;
-    height: 480px;
-    background: radial-gradient(circle, rgba(34, 211, 238, 0.14) 0%, transparent 65%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-.synora-hero::after {
-    content: '';
-    position: absolute;
-    bottom: -30%;
-    left: 10%;
-    width: 320px;
-    height: 320px;
-    background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    pointer-events: none;
-}
-.synora-hero-inner { position: relative; z-index: 1; }
-.synora-hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    background: rgba(34, 211, 238, 0.08);
-    border: 1px solid rgba(34, 211, 238, 0.25);
-    color: var(--synora-cyan);
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 1.6px;
-    text-transform: uppercase;
-    padding: 0.35rem 0.9rem;
-    border-radius: 100px;
-    margin-bottom: 1.25rem;
-}
-.synora-hero-title {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 3rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    margin: 0 0 0.5rem 0;
-    letter-spacing: -0.04em;
-    line-height: 1.05;
-}
-.synora-hero-subtitle {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 500;
-    color: var(--synora-cyan);
-    margin: 0 0 1rem 0;
-    letter-spacing: -0.01em;
-}
-.synora-hero-desc {
-    font-size: 0.95rem;
-    color: var(--synora-muted);
-    margin: 0 0 1.75rem 0;
-    max-width: 560px;
-    line-height: 1.7;
-}
-.synora-hero-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--synora-border);
-}
-.synora-hero-stat {
-    min-width: 120px;
-}
-.synora-hero-stat-value {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    letter-spacing: -0.02em;
-}
-.synora-hero-stat-label {
-    font-size: 0.72rem;
-    font-weight: 500;
-    color: var(--synora-dim);
-    margin-top: 0.2rem;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-}
-
-/* Page headers */
-.page-header {
-    margin-bottom: 2rem;
-    padding-bottom: 1.25rem;
-    border-bottom: 1px solid var(--synora-border);
-}
-.page-title {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    margin: 0 0 0.35rem 0;
-    letter-spacing: -0.03em;
-}
-.page-subtitle {
-    font-size: 0.925rem;
-    color: var(--synora-muted);
-    margin: 0;
-    line-height: 1.5;
-}
-
-.section-header {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--synora-cyan);
-    margin: 2rem 0 1rem 0;
-}
-
-/* Executive KPI cards */
-.metric-card {
-    background: linear-gradient(145deg, var(--synora-elevated) 0%, var(--synora-card) 100%);
-    border-radius: 16px;
-    padding: 1.5rem 1.35rem;
-    border: 1px solid var(--synora-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.2s ease, transform 0.2s ease;
-    height: 100%;
-}
-.metric-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--synora-cyan), var(--synora-indigo));
-    opacity: 0.7;
-}
-.metric-card:hover {
-    border-color: rgba(34, 211, 238, 0.25);
-    transform: translateY(-2px);
-}
-.metric-label {
-    font-size: 0.68rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--synora-dim);
-    margin-bottom: 0.75rem;
-}
-.metric-value {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    line-height: 1;
-    margin-bottom: 0.35rem;
-    letter-spacing: -0.03em;
-}
-.metric-unit {
-    font-size: 0.78rem;
-    color: var(--synora-muted);
-    font-weight: 500;
-    margin-bottom: 0.85rem;
-}
-.metric-status {
-    display: inline-block;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    padding: 0.25rem 0.65rem;
-    border-radius: 6px;
-}
-.status-success { background: rgba(52, 211, 153, 0.12); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.25); }
-.status-warning { background: rgba(251, 191, 36, 0.12); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.25); }
-.status-critical { background: rgba(248, 113, 113, 0.12); color: #F87171; border: 1px solid rgba(248, 113, 113, 0.25); }
-.status-neutral { background: rgba(148, 163, 184, 0.1); color: var(--synora-muted); border: 1px solid var(--synora-border); }
-
-/* App cards */
-.app-card {
-    background: var(--synora-elevated);
-    border-radius: 16px;
-    padding: 1.75rem 2rem;
-    border: 1px solid var(--synora-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-    margin-bottom: 1.25rem;
-    color: var(--synora-muted);
-}
-.app-card-title {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    margin-bottom: 0.5rem;
-}
-
-/* Alerts */
-.alert-critical {
-    background: rgba(248, 113, 113, 0.06);
-    border: 1px solid rgba(248, 113, 113, 0.2);
-    border-left: 4px solid var(--synora-critical);
-    border-radius: 12px;
-    padding: 1.15rem 1.35rem;
-    margin-bottom: 0.85rem;
-}
-.alert-warning {
-    background: rgba(251, 191, 36, 0.06);
-    border: 1px solid rgba(251, 191, 36, 0.2);
-    border-left: 4px solid var(--synora-warning);
-    border-radius: 12px;
-    padding: 1.15rem 1.35rem;
-    margin-bottom: 0.85rem;
-}
-.alert-success {
-    background: rgba(52, 211, 153, 0.06);
-    border: 1px solid rgba(52, 211, 153, 0.2);
-    border-left: 4px solid var(--synora-success);
-    border-radius: 12px;
-    padding: 1.15rem 1.35rem;
-    margin-bottom: 0.85rem;
-}
-.alert-title {
-    font-weight: 600;
-    font-size: 0.9rem;
-    margin-bottom: 0.25rem;
-    color: var(--synora-text);
-}
-.alert-body {
-    font-size: 0.85rem;
-    color: var(--synora-muted);
-    line-height: 1.55;
-}
-
-/* Summary & recommendations */
-.summary-card {
-    background: var(--synora-elevated);
-    border-radius: 16px;
-    padding: 1.5rem 1.75rem;
-    border: 1px solid var(--synora-border);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    margin-bottom: 1.25rem;
-    color: var(--synora-muted);
-}
-.summary-heading {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    margin-bottom: 0.65rem;
-}
-.summary-body {
-    font-size: 0.88rem;
-    color: var(--synora-muted);
-    line-height: 1.65;
-}
-.summary-body p { color: var(--synora-muted); margin: 0 0 0.5rem 0; }
-.summary-body strong { color: var(--synora-text); font-weight: 600; }
-
-.report-section {
-    background: var(--synora-elevated);
-    border-radius: 16px;
-    padding: 1.5rem 1.75rem;
-    border: 1px solid var(--synora-border);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-    margin-bottom: 1.25rem;
-    color: var(--synora-muted);
-}
-.report-section h2 {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--synora-text) !important;
-    margin: 0 0 0.85rem 0;
-}
-.report-section h3 {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--synora-cyan) !important;
-    margin: 0.85rem 0 0.45rem 0;
-}
-.report-section p, .report-section li {
-    color: var(--synora-muted) !important;
-    font-size: 0.88rem;
-    line-height: 1.65;
-}
-.report-section strong { color: var(--synora-text) !important; }
-
-.rec-card {
-    background: var(--synora-elevated);
-    border-radius: 14px;
-    padding: 1.35rem 1.5rem;
-    border: 1px solid var(--synora-border);
-    border-left: 4px solid var(--synora-cyan);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    margin-bottom: 1rem;
-}
-.rec-priority-high { border-left-color: var(--synora-critical); }
-.rec-priority-med  { border-left-color: var(--synora-warning); }
-.rec-priority-low  { border-left-color: var(--synora-success); }
-.rec-title {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    margin-bottom: 0.35rem;
-}
-.rec-body {
-    font-size: 0.85rem;
-    color: var(--synora-muted);
-    line-height: 1.6;
-}
-.priority-badge {
-    display: inline-block;
-    font-size: 0.6rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-    margin-bottom: 0.55rem;
-}
-.badge-high { background: rgba(248, 113, 113, 0.12); color: var(--synora-critical); border: 1px solid rgba(248, 113, 113, 0.25); }
-.badge-med  { background: rgba(251, 191, 36, 0.12); color: var(--synora-warning); border: 1px solid rgba(251, 191, 36, 0.25); }
-.badge-low  { background: rgba(52, 211, 153, 0.12); color: var(--synora-success); border: 1px solid rgba(52, 211, 153, 0.25); }
-
-/* Upload zone */
-.upload-panel {
-    background: var(--synora-elevated);
-    border: 1px solid var(--synora-border);
-    border-radius: 20px;
-    padding: 2rem;
+    border-radius: 18px;
+    padding: 2rem 2.25rem;
     margin-bottom: 1.5rem;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+.summary-heading, .rec-title, .app-card-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    color: var(--synora-text);
+}
+.summary-body, .rec-body { color: var(--synora-muted); line-height: 1.65; }
+.report-section h2 { font-family: 'DM Sans', sans-serif; color: var(--synora-text) !important; }
+.report-section h3 { color: var(--synora-cyan) !important; }
+.report-section p, .report-section li { color: var(--synora-muted) !important; }
+
+.alert-critical, .alert-warning, .alert-success {
+    border-radius: 14px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    backdrop-filter: blur(8px);
+}
+.alert-critical { background: rgba(248,113,113,0.06); border: 1px solid rgba(248,113,113,0.18); border-left: 3px solid var(--synora-critical); }
+.alert-warning { background: rgba(251,191,36,0.06); border: 1px solid rgba(251,191,36,0.18); border-left: 3px solid var(--synora-warning); }
+.alert-success { background: rgba(52,211,153,0.06); border: 1px solid rgba(52,211,153,0.18); border-left: 3px solid var(--synora-success); }
+.alert-title { font-weight: 600; color: var(--synora-text); }
+.alert-body { color: var(--synora-muted); font-size: 0.88rem; line-height: 1.6; }
+
+.rec-card { border-left: 3px solid var(--synora-cyan); }
+.rec-priority-high { border-left-color: var(--synora-critical); }
+.rec-priority-med { border-left-color: var(--synora-warning); }
+.rec-priority-low { border-left-color: var(--synora-success); }
+.priority-badge { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.22rem 0.6rem; border-radius: 999px; }
+.badge-high { background: rgba(248,113,113,0.1); color: var(--synora-critical); border: 1px solid rgba(248,113,113,0.2); }
+.badge-med { background: rgba(251,191,36,0.1); color: var(--synora-warning); border: 1px solid rgba(251,191,36,0.2); }
+.badge-low { background: rgba(52,211,153,0.1); color: var(--synora-success); border: 1px solid rgba(52,211,153,0.2); }
+
+.upload-panel {
+    background: var(--synora-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--synora-border);
+    border-radius: 20px;
+    padding: 2.5rem 2.75rem;
+    margin-bottom: 2.5rem;
 }
 .upload-zone {
-    background: rgba(6, 9, 18, 0.5);
-    border: 2px dashed rgba(34, 211, 238, 0.25);
+    background: rgba(3,5,8,0.5);
+    border: 1px dashed rgba(34,211,238,0.22);
     border-radius: 16px;
-    padding: 3rem 2rem;
+    padding: 3.5rem 2rem;
     text-align: center;
     transition: border-color 0.2s ease;
 }
-.upload-zone:hover {
-    border-color: rgba(34, 211, 238, 0.45);
-}
+.upload-zone:hover { border-color: rgba(34,211,238,0.45); }
 .upload-icon {
+    width: 52px; height: 52px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 56px;
-    height: 56px;
-    background: rgba(34, 211, 238, 0.08);
-    border: 1px solid rgba(34, 211, 238, 0.2);
+    background: rgba(34,211,238,0.06);
+    border: 1px solid rgba(34,211,238,0.18);
     border-radius: 14px;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--synora-cyan);
     margin-bottom: 1rem;
 }
-.upload-title {
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    color: var(--synora-text);
-    font-size: 1rem;
-    margin-bottom: 0.35rem;
-}
-.upload-hint {
-    font-size: 0.8rem;
-    color: var(--synora-dim);
-    margin-top: 0.5rem;
-    line-height: 1.5;
-}
-.upload-columns {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-top: 1.25rem;
-}
+.upload-title { font-family: 'DM Sans', sans-serif; font-weight: 600; color: var(--synora-text); }
+.upload-hint { font-size: 0.82rem; color: var(--synora-dim); margin-top: 0.5rem; }
+.upload-columns { display: flex; flex-wrap: wrap; gap: 0.45rem; justify-content: center; margin-top: 1.25rem; }
 .upload-col-tag {
-    font-size: 0.68rem;
-    font-weight: 500;
+    font-size: 0.65rem;
     color: var(--synora-muted);
-    background: rgba(17, 24, 39, 0.8);
+    background: rgba(255,255,255,0.03);
     border: 1px solid var(--synora-border);
     border-radius: 6px;
     padding: 0.25rem 0.55rem;
     font-family: 'Inter', monospace;
 }
 
-/* Executive stat cards */
 .fin-card {
-    background: linear-gradient(145deg, var(--synora-elevated) 0%, var(--synora-card) 100%);
-    border-radius: 16px;
-    padding: 1.5rem 1.25rem;
+    background: var(--synora-glass);
+    backdrop-filter: blur(12px);
     border: 1px solid var(--synora-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-radius: 18px;
+    padding: 2rem 1.5rem;
     text-align: center;
-    position: relative;
-    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease;
 }
-.fin-card::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--synora-cyan), transparent);
-    opacity: 0.5;
-}
+.fin-card:hover { transform: translateY(-3px); border-color: var(--synora-border-hover); }
 .fin-value {
     font-family: 'DM Sans', sans-serif;
-    font-size: 2rem;
+    font-size: 2.15rem;
     font-weight: 700;
     color: var(--synora-text);
-    line-height: 1;
     letter-spacing: -0.03em;
 }
 .fin-label {
-    font-size: 0.72rem;
+    font-size: 0.68rem;
     color: var(--synora-dim);
-    margin-top: 0.5rem;
+    margin-top: 0.55rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
 }
 
-/* Buttons */
+/* ── Buttons ── */
+.stButton > button {
+    border-radius: 999px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    padding: 0.7rem 1.75rem !important;
+    transition: all 0.22s ease !important;
+    letter-spacing: 0.01em !important;
+}
 .stButton > button[kind="primary"],
 .stDownloadButton > button {
-    background: linear-gradient(135deg, rgba(34,211,238,0.15), rgba(129,140,248,0.15)) !important;
+    background: rgba(34, 211, 238, 0.08) !important;
     color: var(--synora-cyan) !important;
-    border: 1px solid rgba(34, 211, 238, 0.35) !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
-    font-size: 0.875rem !important;
-    padding: 0.6rem 1.35rem !important;
-    box-shadow: 0 4px 16px rgba(34, 211, 238, 0.1) !important;
-    transition: all 0.2s ease !important;
+    border: 1.5px solid rgba(34, 211, 238, 0.55) !important;
+    box-shadow: 0 0 24px rgba(34, 211, 238, 0.12) !important;
 }
 .stButton > button[kind="primary"]:hover,
 .stDownloadButton > button:hover {
-    background: linear-gradient(135deg, rgba(34,211,238,0.25), rgba(129,140,248,0.2)) !important;
+    background: rgba(34, 211, 238, 0.16) !important;
     border-color: var(--synora-cyan) !important;
-    box-shadow: 0 6px 24px rgba(34, 211, 238, 0.2) !important;
     color: var(--synora-text) !important;
+    box-shadow: 0 0 32px rgba(34, 211, 238, 0.25) !important;
+    transform: translateY(-1px);
 }
 .stButton > button[kind="secondary"] {
-    background: var(--synora-elevated) !important;
-    color: var(--synora-muted) !important;
-    border: 1px solid var(--synora-border) !important;
-    border-radius: 10px !important;
-    font-weight: 600 !important;
+    background: transparent !important;
+    color: var(--synora-text) !important;
+    border: 1.5px solid rgba(248, 250, 252, 0.25) !important;
+}
+.stButton > button[kind="secondary"]:hover {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(248, 250, 252, 0.45) !important;
 }
 
-/* File uploader */
-[data-testid="stFileUploader"] {
-    background: transparent;
-}
 [data-testid="stFileUploader"] section {
-    background: rgba(6, 9, 18, 0.4) !important;
-    border: 1px dashed rgba(34, 211, 238, 0.2) !important;
-    border-radius: 14px !important;
-    padding: 1.5rem !important;
+    background: rgba(3,5,8,0.4) !important;
+    border: 1px dashed rgba(34,211,238,0.18) !important;
+    border-radius: 16px !important;
+    padding: 1.75rem !important;
 }
 [data-testid="stFileUploader"] section span,
-[data-testid="stFileUploader"] section small {
-    color: var(--synora-muted) !important;
-}
+[data-testid="stFileUploader"] section small { color: var(--synora-muted) !important; }
 
-/* Dataframe & expander */
-[data-testid="stDataFrame"] { border-radius: 12px; overflow: hidden; }
-.stExpander {
-    background: var(--synora-elevated);
-    border: 1px solid var(--synora-border);
-    border-radius: 12px;
-}
+[data-testid="stDataFrame"] { border-radius: 14px; overflow: hidden; }
+.stExpander { background: var(--synora-glass); border: 1px solid var(--synora-border); border-radius: 14px; }
 
 .chart-wrap {
-    background: var(--synora-elevated);
-    border-radius: 16px;
+    background: var(--synora-glass);
+    backdrop-filter: blur(8px);
     border: 1px solid var(--synora-border);
-    padding: 0.75rem;
-    margin-bottom: 0.75rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.section-divider {
-    height: 1px;
-    background: var(--synora-border);
-    margin: 2rem 0;
+    border-radius: 18px;
+    padding: 1rem;
+    margin-bottom: 1rem;
 }
 
 .synora-footer {
     text-align: center;
     font-size: 0.72rem;
     color: var(--synora-dim);
-    padding: 2.5rem 0 1rem 0;
+    padding: 3rem 0 1.5rem 0;
     border-top: 1px solid var(--synora-border);
-    margin-top: 2rem;
+    margin-top: 3rem;
 }
 
 .empty-state {
-    background: var(--synora-elevated);
-    border: 1px dashed rgba(34, 211, 238, 0.2);
+    background: var(--synora-glass);
+    backdrop-filter: blur(12px);
+    border: 1px dashed rgba(34,211,238,0.18);
     border-radius: 20px;
-    padding: 3rem 2.5rem;
+    padding: 4rem 3rem;
     text-align: center;
     color: var(--synora-muted);
 }
 .empty-state strong { color: var(--synora-text); }
 
-/* Platform showcase cards */
 .platform-banner {
-    background: linear-gradient(135deg, #0A1020 0%, #141C2E 55%, #0D1528 100%);
+    background: var(--synora-glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--synora-border);
     border-radius: 20px;
-    padding: 2.25rem 2.75rem;
-    margin-bottom: 2rem;
-    border: 1px solid rgba(34, 211, 238, 0.15);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+    padding: 2.75rem 3rem;
+    margin-bottom: 2.5rem;
 }
-.platform-metric {
-    text-align: center;
-    padding: 1.25rem 0.75rem;
-}
+.platform-metric { text-align: center; padding: 1.5rem 0.75rem; }
 .platform-metric-value {
     font-family: 'DM Sans', sans-serif;
-    font-size: 2rem;
+    font-size: 2.1rem;
     font-weight: 700;
     color: var(--synora-text);
-    line-height: 1;
     letter-spacing: -0.03em;
 }
-.platform-metric-label {
-    font-size: 0.75rem;
-    color: var(--synora-dim);
-    margin-top: 0.4rem;
-    line-height: 1.45;
-}
+.platform-metric-label { font-size: 0.75rem; color: var(--synora-dim); margin-top: 0.45rem; line-height: 1.5; }
 .tech-stack-bar {
-    background: var(--synora-elevated);
+    background: var(--synora-glass);
     border: 1px solid var(--synora-border);
-    border-radius: 14px;
-    padding: 1.35rem 1.75rem;
+    border-radius: 16px;
+    padding: 1.75rem 2rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -808,21 +753,43 @@ CHART_COLORS = [
 ]
 
 NAV_PAGES = [
-    "Overview",
-    "Upload Data",
+    "Mission Control",
+    "Operational Intelligence",
     "ED Operations",
-    "Financial Impact",
-    "AI Advisor",
-    "Reports",
+    "Financial Intelligence",
+    "Executive Intelligence",
+    "Board Ready Reports",
+    "Settings",
 ]
 
+PAGE_ROUTES = {
+    "Mission Control": "overview",
+    "Operational Intelligence": "upload",
+    "ED Operations": "ed_operations",
+    "Financial Intelligence": "financial",
+    "Executive Intelligence": "executive",
+    "Board Ready Reports": "reports",
+    "Settings": "settings",
+}
+
 NAV_ICONS = {
-    "Overview": "◈",
-    "Upload Data": "↑",
+    "Mission Control": "◈",
+    "Operational Intelligence": "↑",
     "ED Operations": "◉",
-    "Financial Impact": "◆",
-    "AI Advisor": "✦",
-    "Reports": "▤",
+    "Financial Intelligence": "◆",
+    "Executive Intelligence": "✦",
+    "Board Ready Reports": "▤",
+    "Settings": "⚙",
+}
+
+KPI_ICONS = {
+    "ED_Visits": "⬡",
+    "LOS_Hours": "◷",
+    "Door_to_Provider_Min": "◐",
+    "LWBS_Rate": "◬",
+    "Boarding_Hours": "▣",
+    "Staff_Gap": "◫",
+    "Admission_Rate": "◎",
 }
 
 
@@ -864,14 +831,51 @@ def kpi_status_for_display(col: str, avg: float, cfg: dict) -> tuple[str, str]:
     return "status-neutral", "Tracking"
 
 
+def kpi_trend_for_display(df: pd.DataFrame, col: str, cfg: dict) -> tuple:
+    """Return (trend_label, trend_css_class) for KPI card display only."""
+    if col not in df.columns or len(df) < 2:
+        return "Stable", "trend-neutral"
+    mid = len(df) // 2
+    if mid == 0:
+        return "Stable", "trend-neutral"
+    first = df.iloc[:mid][col].mean()
+    second = df.iloc[mid:][col].mean()
+    delta = second - first
+    higher_is_bad = cfg.get("higher_is_bad", True)
+    if abs(delta) <= 0.5:
+        return "Stable", "trend-neutral"
+    magnitude = abs(delta)
+    if col in ("ED_Visits", "Door_to_Provider_Min", "Staff_Gap"):
+        fmt = f"{magnitude:.0f}"
+    elif col == "Admission_Rate":
+        fmt = f"{magnitude:.1f}%"
+    else:
+        fmt = f"{magnitude:.1f}"
+    if higher_is_bad:
+        trend_class = "trend-negative" if delta > 0 else "trend-positive"
+        arrow = "↑" if delta > 0 else "↓"
+    else:
+        trend_class = "trend-positive" if delta > 0 else "trend-negative"
+        arrow = "↑" if delta > 0 else "↓"
+    return f"{arrow} {fmt} vs prior period", trend_class
+
+
 def metric_card(label: str, value: str, unit: str, status_class: str = "status-neutral",
-                status_label: str = "Tracking"):
+                status_label: str = "Tracking", icon: str = "◈",
+                trend_label: str = "Stable", trend_class: str = "trend-neutral"):
     st.markdown(f"""
-    <div class="metric-card">
-        <div class="metric-label">{label}</div>
-        <div class="metric-value">{value}</div>
-        <div class="metric-unit">{unit}</div>
-        <span class="metric-status {status_class}">{status_label}</span>
+    <div class="exec-kpi-card">
+        <div class="exec-kpi-glow"></div>
+        <div class="exec-kpi-header">
+            <div class="exec-kpi-icon">{icon}</div>
+            <div class="exec-kpi-title">{label}</div>
+        </div>
+        <div class="exec-kpi-value">{value}</div>
+        <div class="exec-kpi-unit">{unit}</div>
+        <div class="exec-kpi-footer">
+            <span class="metric-status {status_class}">{status_label}</span>
+            <span class="exec-kpi-trend {trend_class}">{trend_label}</span>
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1839,7 +1843,7 @@ def _markdown_to_report_html(text: str) -> str:
 def render_consultant_report(df: pd.DataFrame, alerts: list[dict]):
     """Render the AI Consultant Report section with a generate button."""
 
-    st.markdown('<div class="page-header"><h2 class="page-title">Reports</h2>'
+    st.markdown('<div class="page-header"><h2 class="page-title">Board Ready Reports</h2>'
                 '<p class="page-subtitle">Generate and download Synora executive intelligence reports</p></div>',
                 unsafe_allow_html=True)
 
@@ -1943,7 +1947,7 @@ def render_portfolio_demo():
 
     with col1:
         with st.container(border=True):
-            st.markdown("#### 🎯 Who It's Built For")
+            st.markdown("#### Who It's Built For")
             st.markdown("""
 **Primary Users**
 - Chief Operating Officers and Chief Medical Officers
@@ -1959,7 +1963,7 @@ def render_portfolio_demo():
 
     with col2:
         with st.container(border=True):
-            st.markdown("#### ⚡ Problem It Solves")
+            st.markdown("#### Problem It Solves")
             st.markdown("""
 Hospital operations data is often trapped in EMR exports, spreadsheets, and fragmented department reports. Leadership teams spend hours manually compiling KPIs before they can begin analysis.
 
@@ -1987,7 +1991,7 @@ Hospital operations data is often trapped in EMR exports, spreadsheets, and frag
 
     with fc1:
         with st.container(border=True):
-            st.markdown("**📊 Automated KPI Analysis**")
+            st.markdown("**Automated KPI Analysis**")
             st.markdown("""
 - 7 Emergency Department KPIs monitored simultaneously
 - Configurable clinical thresholds per metric
@@ -1998,7 +2002,7 @@ Hospital operations data is often trapped in EMR exports, spreadsheets, and frag
 
     with fc2:
         with st.container(border=True):
-            st.markdown("**🚨 Intelligent Alert Engine**")
+            st.markdown("**Intelligent Alert Engine**")
             st.markdown("""
 - Critical vs. warning severity classification
 - Threshold breach detection with clinical context
@@ -2009,7 +2013,7 @@ Hospital operations data is often trapped in EMR exports, spreadsheets, and frag
 
     with fc3:
         with st.container(border=True):
-            st.markdown("**📄 Executive Report Generator**")
+            st.markdown("**Executive Report Generator**")
             st.markdown("""
 - Rule-based COO-grade consulting narrative
 - 6 structured report sections with clinical framing
@@ -2022,7 +2026,7 @@ Hospital operations data is often trapped in EMR exports, spreadsheets, and frag
 
     # ── Row 3: Business Value / ROI
     with st.container(border=True):
-        st.markdown("#### 💼 Business Value & ROI")
+        st.markdown("#### Business Value & ROI")
         bv1, bv2, bv3, bv4 = st.columns(4)
 
         metrics = [
@@ -2055,7 +2059,7 @@ Synora produces an equivalent first-pass analysis in under a minute, enabling le
 
     # ── Row 4: Future Roadmap
     with st.container(border=True):
-        st.markdown("#### 🗺️ Future Roadmap")
+        st.markdown("#### Future Roadmap")
         r1, r2, r3 = st.columns(3)
 
         with r1:
@@ -2120,9 +2124,30 @@ def init_session_state():
         st.session_state.alerts = []
     if "report_text" not in st.session_state:
         st.session_state.report_text = None
+    if "synora_nav" not in st.session_state:
+        st.session_state.synora_nav = "Mission Control"
+    if "show_platform" not in st.session_state:
+        st.session_state.show_platform = False
 
 
-def render_hero():
+def render_top_nav():
+    st.markdown("""
+    <div class="synora-topnav">
+        <div class="synora-topnav-inner">
+            <div class="synora-topnav-logo">Syn<span>ora</span></div>
+            <nav class="synora-topnav-links">
+                <a href="#">Platform</a>
+                <a href="#">Solutions</a>
+                <a href="#">Technology</a>
+                <a href="#">About</a>
+                <a href="#" class="synora-topnav-cta">Request Demo</a>
+            </nav>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_landing_hero():
     df = st.session_state.df
     stats_html = ""
     if df is not None:
@@ -2148,39 +2173,47 @@ def render_hero():
             </div>
         </div>
         """
-    else:
-        stats_html = """
-        <div class="synora-hero-stats">
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">7</div>
-                <div class="synora-hero-stat-label">KPIs Monitored</div>
-            </div>
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">&lt;60s</div>
-                <div class="synora-hero-stat-label">Time to Insight</div>
-            </div>
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">6</div>
-                <div class="synora-hero-stat-label">Report Sections</div>
-            </div>
-            <div class="synora-hero-stat">
-                <div class="synora-hero-stat-value">PDF</div>
-                <div class="synora-hero-stat-label">Executive Export</div>
-            </div>
-        </div>
-        """
 
     st.markdown(f"""
-    <div class="synora-hero">
+    <div class="synora-hero-fullscreen">
         <div class="synora-hero-inner">
-            <div class="synora-hero-badge">◆ Executive Intelligence</div>
+            <div class="synora-hero-eyebrow">Executive Intelligence for Healthcare Operations</div>
             <h1 class="synora-hero-title">Synora</h1>
-            <p class="synora-hero-subtitle">Executive Intelligence for Healthcare Operations</p>
-            <p class="synora-hero-desc">
-                Transform healthcare data into executive action through AI-powered operational intelligence,
-                predictive analytics, and executive decision support.
+            <p class="synora-hero-tagline">Transform operational complexity into executive clarity.</p>
+            <p class="synora-hero-subtitle">
+                AI-powered operational intelligence for hospitals, health systems,
+                and executive leadership teams.
             </p>
             {stats_html}
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+def render_hero_ctas():
+    st.markdown('<div class="synora-hero-cta-row">', unsafe_allow_html=True)
+    c1, c2, _ = st.columns([1.15, 1.35, 2.5])
+    with c1:
+        if st.button("Explore Platform", type="primary", use_container_width=True, key="hero_explore"):
+            st.session_state.show_platform = True
+            st.session_state.synora_nav = "Mission Control"
+            st.rerun()
+    with c2:
+        if st.button("Import Operational Data", type="secondary", use_container_width=True, key="hero_import"):
+            st.session_state.synora_nav = "Operational Intelligence"
+            st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_compact_hero():
+    st.markdown("""
+    <div class="synora-hero-compact">
+        <div class="synora-hero-inner">
+            <div class="synora-hero-eyebrow">Synora</div>
+            <h1 class="synora-hero-title" style="font-size:2rem;">Executive Intelligence</h1>
+            <p class="synora-hero-subtitle" style="margin-bottom:0;">
+                Import operational data via Operational Intelligence to activate this module.
+            </p>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -2190,18 +2223,18 @@ def render_sidebar() -> str:
     with st.sidebar:
         st.markdown("""
         <div class="synora-sidebar-brand">
-            <div class="synora-logo-mark">◆</div>
             <p class="synora-logo">Syn<span>ora</span></p>
-            <p class="synora-sidebar-tag">Executive Intelligence for Healthcare Operations</p>
+            <p class="synora-sidebar-tagline">Executive Intelligence for Healthcare Operations</p>
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown('<p class="synora-nav-label">Navigation</p>', unsafe_allow_html=True)
+        st.markdown('<p class="synora-nav-label">Modules</p>', unsafe_allow_html=True)
         page = st.radio(
             "Navigation",
             NAV_PAGES,
             format_func=lambda p: f"{NAV_ICONS.get(p, '·')}  {p}",
             label_visibility="collapsed",
+            key="synora_nav",
         )
 
         st.markdown("---")
@@ -2219,7 +2252,7 @@ def render_sidebar() -> str:
             <div class="synora-sidebar-status">
                 <span class="status-dot status-dot-idle"></span>
                 <span style="font-size:0.82rem;color:#94A3B8;">Awaiting data upload</span>
-                <div style="font-size:0.72rem;color:#64748B;margin-top:0.35rem;">Upload a CSV to begin</div>
+                <div style="font-size:0.72rem;color:#64748B;margin-top:0.35rem;">Upload via Operational Intelligence</div>
             </div>
             """, unsafe_allow_html=True)
         st.markdown(
@@ -2261,7 +2294,7 @@ def render_empty_state(message: str = "Upload a KPI dataset to unlock this view.
         <p><strong>No data loaded</strong></p>
         <p style="margin-top:0.5rem;">{message}</p>
         <p style="margin-top:1.25rem;font-size:0.85rem;color:#64748B;">
-            Go to <strong style="color:#22D3EE;">Upload Data</strong> in the sidebar to get started.
+            Go to <strong style="color:#22D3EE;">Operational Intelligence</strong> in the sidebar to get started.
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -2290,15 +2323,25 @@ def render_kpi_metrics(df: pd.DataFrame):
     for i, (label, col, val, unit) in enumerate(metric_items[:4]):
         cfg = next((c for n, c in KPI_CONFIG.items() if c["col"] == col), {})
         status_class, status_label = kpi_status_for_display(col, avgs.get(col, 0), cfg)
+        trend_label, trend_class = kpi_trend_for_display(df, col, cfg)
         with row1[i]:
-            metric_card(label, val, unit, status_class, status_label)
+            metric_card(
+                label, val, unit, status_class, status_label,
+                icon=KPI_ICONS.get(col, "◈"),
+                trend_label=trend_label, trend_class=trend_class,
+            )
     st.markdown("<br>", unsafe_allow_html=True)
     row2 = st.columns(4)
     for i, (label, col, val, unit) in enumerate(metric_items[4:]):
         cfg = next((c for n, c in KPI_CONFIG.items() if c["col"] == col), {})
         status_class, status_label = kpi_status_for_display(col, avgs.get(col, 0), cfg)
+        trend_label, trend_class = kpi_trend_for_display(df, col, cfg)
         with row2[i]:
-            metric_card(label, val, unit, status_class, status_label)
+            metric_card(
+                label, val, unit, status_class, status_label,
+                icon=KPI_ICONS.get(col, "◈"),
+                trend_label=trend_label, trend_class=trend_class,
+            )
 
 
 def render_kpi_charts(df: pd.DataFrame):
@@ -2375,7 +2418,8 @@ def render_financial_impact(df: pd.DataFrame, alerts: list[dict]):
 
 
 def render_page_overview():
-    render_hero()
+    render_landing_hero()
+    render_hero_ctas()
     df = st.session_state.df
     if df is not None:
         alerts = st.session_state.alerts
@@ -2397,11 +2441,19 @@ def render_page_overview():
         st.markdown("<br>", unsafe_allow_html=True)
         st.markdown('<div class="section-header">Operational Status</div>', unsafe_allow_html=True)
         render_alerts_panel(alerts)
+    if st.session_state.get("show_platform", False):
+        render_portfolio_demo()
+
+
+def render_page_settings():
+    st.markdown('<div class="page-header"><h2 class="page-title">Settings</h2>'
+                '<p class="page-subtitle">Platform configuration, technology stack, and enterprise deployment information</p></div>',
+                unsafe_allow_html=True)
     render_portfolio_demo()
 
 
 def render_page_upload():
-    st.markdown('<div class="page-header"><h2 class="page-title">Upload Data</h2>'
+    st.markdown('<div class="page-header"><h2 class="page-title">Operational Intelligence</h2>'
                 '<p class="page-subtitle">Import healthcare operations data to power Synora executive intelligence</p></div>',
                 unsafe_allow_html=True)
 
@@ -2459,7 +2511,7 @@ def render_page_upload():
 
 def render_page_ed_operations(df: pd.DataFrame, alerts: list[dict]):
     st.markdown('<div class="page-header"><h2 class="page-title">ED Operations</h2>'
-                '<p class="page-subtitle">Real-time KPI monitoring, trends, and clinical alerts</p></div>',
+                '<p class="page-subtitle">Real-time KPI monitoring, trend analysis, and clinical alert intelligence</p></div>',
                 unsafe_allow_html=True)
     st.markdown('<div class="section-header">Key Performance Indicators</div>', unsafe_allow_html=True)
     render_kpi_metrics(df)
@@ -2470,7 +2522,7 @@ def render_page_ed_operations(df: pd.DataFrame, alerts: list[dict]):
 
 
 def render_page_ai_advisor(df: pd.DataFrame, alerts: list[dict]):
-    st.markdown('<div class="page-header"><h2 class="page-title">AI Advisor</h2>'
+    st.markdown('<div class="page-header"><h2 class="page-title">Executive Intelligence</h2>'
                 '<p class="page-subtitle">Synora executive intelligence summary and prioritized recommendations</p></div>',
                 unsafe_allow_html=True)
     st.markdown('<div class="section-header">Executive Summary</div>', unsafe_allow_html=True)
@@ -2480,8 +2532,8 @@ def render_page_ai_advisor(df: pd.DataFrame, alerts: list[dict]):
 
 
 def render_page_financial_impact(df: pd.DataFrame, alerts: list[dict]):
-    st.markdown('<div class="page-header"><h2 class="page-title">Financial Impact</h2>'
-                '<p class="page-subtitle">Directional cost exposure and revenue impact estimates</p></div>',
+    st.markdown('<div class="page-header"><h2 class="page-title">Financial Intelligence</h2>'
+                '<p class="page-subtitle">Directional cost exposure, revenue impact estimates, and action planning</p></div>',
                 unsafe_allow_html=True)
     render_financial_impact(df, alerts)
 
@@ -2495,26 +2547,30 @@ def render_page_reports(df: pd.DataFrame, alerts: list[dict]):
 # ═══════════════════════════════════════════════
 def main():
     init_session_state()
+    render_top_nav()
     page = render_sidebar()
+    route = PAGE_ROUTES[page]
 
-    if page == "Overview":
+    if route == "overview":
         render_page_overview()
-    elif page == "Upload Data":
+    elif route == "upload":
         render_page_upload()
+    elif route == "settings":
+        render_page_settings()
     else:
         if st.session_state.df is None:
-            render_hero()
+            render_compact_hero()
             render_empty_state()
         else:
             df = st.session_state.df
             alerts = st.session_state.alerts
-            if page == "ED Operations":
+            if route == "ed_operations":
                 render_page_ed_operations(df, alerts)
-            elif page == "Financial Impact":
+            elif route == "financial":
                 render_page_financial_impact(df, alerts)
-            elif page == "AI Advisor":
+            elif route == "executive":
                 render_page_ai_advisor(df, alerts)
-            elif page == "Reports":
+            elif route == "reports":
                 render_page_reports(df, alerts)
 
     render_synora_footer()
