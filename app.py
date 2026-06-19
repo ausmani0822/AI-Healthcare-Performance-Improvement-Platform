@@ -95,10 +95,7 @@ html, body, [class*="css"] {
     letter-spacing: -0.03em;
 }
 .synora-topnav-logo span {
-    background: linear-gradient(135deg, #22D3EE, #818CF8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--synora-muted);
 }
 .synora-topnav-links {
     display: flex;
@@ -133,12 +130,12 @@ html, body, [class*="css"] {
 /* ── Layout ── */
 .main .block-container {
     color: var(--synora-text);
-    padding-top: calc(var(--nav-height) + 1.5rem);
-    padding-bottom: 4rem;
-    max-width: 1360px;
+    padding-top: calc(var(--nav-height) + 2rem);
+    padding-bottom: 5rem;
+    max-width: 1200px;
 }
-[data-testid="stHorizontalBlock"] { gap: 1.25rem; }
-[data-testid="column"] { padding: 0 0.2rem; }
+[data-testid="stHorizontalBlock"] { gap: 1.5rem; }
+[data-testid="column"] { padding: 0 0.35rem; }
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
@@ -147,7 +144,7 @@ html, body, [class*="css"] {
     backdrop-filter: blur(12px);
 }
 [data-testid="stSidebar"] > div:first-child {
-    padding: calc(var(--nav-height) + 0.5rem) 1rem 2rem 1rem;
+    padding: calc(var(--nav-height) + 1rem) 1.25rem 2.5rem 1.25rem;
 }
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
 [data-testid="stSidebar"] [data-testid="stMarkdownContainer"] span,
@@ -159,68 +156,66 @@ html, body, [class*="css"] {
     margin: 1.5rem 0 !important;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] {
-    gap: 0.15rem;
+    gap: 0.35rem;
 }
 [data-testid="stSidebar"] .stRadio label {
     color: var(--synora-muted) !important;
     font-weight: 500 !important;
-    font-size: 0.84rem !important;
+    font-size: 0.86rem !important;
     width: 100%;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
     background: transparent;
     border: 1px solid transparent;
     border-radius: 10px;
-    padding: 0.65rem 0.85rem;
+    padding: 0.75rem 1rem;
     margin: 0;
-    transition: all 0.2s ease;
+    transition: background 0.15s ease, border-color 0.15s ease;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.025);
     border-color: var(--synora-border);
     color: var(--synora-text) !important;
 }
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) {
-    background: rgba(34, 211, 238, 0.08) !important;
-    border-color: rgba(34, 211, 238, 0.22) !important;
-    color: var(--synora-cyan) !important;
-    box-shadow: inset 0 0 20px rgba(34, 211, 238, 0.05);
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(148, 163, 184, 0.22) !important;
+    color: var(--synora-text) !important;
+    box-shadow: none;
 }
 
 .synora-sidebar-brand {
-    padding: 0 0.25rem 1.75rem 0.25rem;
-    margin-bottom: 0.5rem;
+    padding: 0 0.35rem 2rem 0.35rem;
+    margin-bottom: 0.75rem;
     border-bottom: 1px solid var(--synora-border);
 }
 .synora-logo {
     font-family: 'DM Sans', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 700;
+    font-size: 1.35rem;
+    font-weight: 600;
     color: var(--synora-text);
-    letter-spacing: -0.045em;
-    margin: 0 0 0.75rem 0;
+    letter-spacing: -0.03em;
+    margin: 0 0 0.65rem 0;
     line-height: 1;
 }
 .synora-logo span {
-    background: linear-gradient(135deg, #22D3EE, #818CF8);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--synora-muted);
 }
 .synora-sidebar-tagline {
-    font-size: 0.78rem;
+    font-size: 0.72rem;
     font-weight: 400;
-    line-height: 1.6;
+    line-height: 1.55;
     color: var(--synora-dim);
     margin: 0;
+    letter-spacing: 0.01em;
 }
 .synora-nav-label {
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     font-weight: 600;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--synora-dim);
-    margin: 0.5rem 0 0.75rem 0.35rem;
+    margin: 0.75rem 0 1rem 0.5rem;
 }
 .synora-sidebar-status {
     background: var(--synora-glass);
@@ -242,9 +237,9 @@ html, body, [class*="css"] {
 /* ── Full-screen hero ── */
 .synora-hero-fullscreen {
     position: relative;
-    min-height: calc(100vh - var(--nav-height) - 3rem);
-    margin: -0.5rem -1rem 0 -1rem;
-    padding: 4.5rem 3.5rem 5rem 3.5rem;
+    min-height: calc(100vh - var(--nav-height) - 2rem);
+    margin: -1rem -1rem 0 -1rem;
+    padding: 6rem 4rem 5rem 4rem;
     border-radius: 0;
     overflow: hidden;
     display: flex;
@@ -252,101 +247,130 @@ html, body, [class*="css"] {
     justify-content: center;
     border: none;
     background:
-        radial-gradient(ellipse 70% 55% at 15% 20%, rgba(34, 211, 238, 0.09), transparent 55%),
-        radial-gradient(ellipse 50% 45% at 85% 75%, rgba(129, 140, 248, 0.07), transparent 50%),
-        linear-gradient(180deg, rgba(3,5,8,0.3) 0%, rgba(3,5,8,0.95) 100%),
-        repeating-linear-gradient(0deg, transparent, transparent 59px, rgba(34,211,238,0.025) 59px, rgba(34,211,238,0.025) 60px),
-        repeating-linear-gradient(90deg, transparent, transparent 59px, rgba(34,211,238,0.025) 59px, rgba(34,211,238,0.025) 60px),
+        linear-gradient(180deg, rgba(3,5,8,0.2) 0%, rgba(3,5,8,1) 92%),
+        repeating-linear-gradient(0deg, transparent, transparent 47px, rgba(148,163,184,0.035) 47px, rgba(148,163,184,0.035) 48px),
+        repeating-linear-gradient(90deg, transparent, transparent 47px, rgba(148,163,184,0.035) 47px, rgba(148,163,184,0.035) 48px),
         #030508;
-}
-.synora-hero-fullscreen::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 40%, rgba(34,211,238,0.06) 0%, transparent 45%);
-    pointer-events: none;
 }
 .synora-hero-fullscreen::after {
     content: '';
     position: absolute;
     bottom: 0; left: 0; right: 0;
-    height: 120px;
+    height: 80px;
     background: linear-gradient(transparent, var(--synora-bg));
     pointer-events: none;
 }
-.synora-hero-inner { position: relative; z-index: 2; max-width: 820px; }
-.synora-hero-eyebrow {
-    font-size: 0.65rem;
+.synora-hero-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 920px;
+    padding-right: 2rem;
+}
+.synora-hero-brand {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
     font-weight: 600;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.22em;
     text-transform: uppercase;
-    color: var(--synora-cyan);
-    margin-bottom: 1.5rem;
+    color: var(--synora-dim);
+    margin: 0 0 2.75rem 0;
 }
-.synora-hero-title {
+.synora-hero-headline {
     font-family: 'DM Sans', sans-serif;
-    font-size: clamp(3.5rem, 7vw, 5.5rem);
-    font-weight: 700;
+    font-size: clamp(2.75rem, 5.8vw, 4.75rem);
+    font-weight: 600;
     color: var(--synora-text);
-    margin: 0 0 0.75rem 0;
-    letter-spacing: -0.045em;
-    line-height: 0.95;
+    margin: 0 0 2.25rem 0;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+    text-transform: uppercase;
 }
-.synora-hero-brand-line {
+.synora-hero-headline span {
+    display: block;
+}
+.synora-hero-statement {
     font-family: 'DM Sans', sans-serif;
-    font-size: 1.05rem;
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
     font-weight: 500;
     color: var(--synora-muted);
-    margin: 0 0 1.25rem 0;
-    letter-spacing: -0.01em;
+    margin: 0 0 1.5rem 0;
+    letter-spacing: -0.015em;
+    line-height: 1.45;
+    max-width: 540px;
 }
-.synora-hero-tagline {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.65rem;
-    font-weight: 500;
-    color: var(--synora-text);
-    margin: 0 0 1rem 0;
-    letter-spacing: -0.025em;
-    line-height: 1.25;
-    max-width: 640px;
-}
-.synora-hero-subtitle {
-    font-size: 1.05rem;
+.synora-hero-desc {
+    font-size: 0.95rem;
     color: var(--synora-dim);
-    margin: 0 0 2.5rem 0;
-    max-width: 580px;
-    line-height: 1.7;
-}
-.synora-hero-stats {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    padding-top: 2rem;
-    margin-top: 2rem;
-    border-top: 1px solid var(--synora-border);
-}
-.synora-hero-stat-value {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.65rem;
-    font-weight: 700;
-    color: var(--synora-text);
-    letter-spacing: -0.02em;
-}
-.synora-hero-stat-label {
-    font-size: 0.68rem;
-    font-weight: 500;
-    color: var(--synora-dim);
-    margin-top: 0.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    margin: 0;
+    max-width: 480px;
+    line-height: 1.75;
+    font-weight: 400;
 }
 
-/* Hero CTA row — pulled into hero visually */
-.synora-hero-cta-row {
-    margin-top: -1rem !important;
-    padding: 0 3.5rem 2rem 3.5rem !important;
-    position: relative;
-    z-index: 3;
+/* Operational status strip */
+.synora-status-wrap {
+    margin: 0 -1rem 3.5rem -1rem;
+    padding: 0 0.25rem;
+}
+.synora-status-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--synora-border);
+    border-bottom: 1px solid var(--synora-border);
+    background: rgba(10, 14, 23, 0.65);
+}
+.synora-status-item {
+    padding: 1.75rem 2rem;
+    border-right: 1px solid var(--synora-border);
+}
+.synora-status-item:last-child {
+    border-right: none;
+}
+.synora-status-label {
+    display: block;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--synora-dim);
+    margin-bottom: 0.65rem;
+}
+.synora-status-value {
+    display: block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--synora-text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+}
+.synora-status-value.is-muted {
+    color: var(--synora-muted);
+    font-size: 1.25rem;
+}
+.synora-status-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--synora-dim);
+    margin: 0 0 0 0.25rem;
+    padding-top: 0.5rem;
+}
+.synora-status-live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--synora-success);
+}
+
+.synora-hero-actions {
+    margin: 0 0 4rem 0;
+    padding: 0 0.25rem;
 }
 
 /* Compact hero for inner pages */
@@ -364,33 +388,33 @@ html, body, [class*="css"] {
 
 /* ── Page headers ── */
 .page-header {
-    margin: 1rem 0 3rem 0;
-    padding: 0 0 2rem 0;
+    margin: 2rem 0 3.5rem 0;
+    padding: 0 0 2.25rem 0;
     border-bottom: 1px solid var(--synora-border);
 }
 .page-title {
     font-family: 'DM Sans', sans-serif;
-    font-size: 2.1rem;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: 600;
     color: var(--synora-text);
-    margin: 0 0 0.65rem 0;
-    letter-spacing: -0.035em;
+    margin: 0 0 0.85rem 0;
+    letter-spacing: -0.03em;
 }
 .page-subtitle {
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--synora-muted);
     margin: 0;
-    line-height: 1.65;
-    max-width: 680px;
+    line-height: 1.7;
+    max-width: 560px;
 }
 .section-header {
     font-family: 'DM Sans', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.62rem;
     font-weight: 600;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--synora-cyan);
-    margin: 3rem 0 1.5rem 0;
+    color: var(--synora-dim);
+    margin: 4rem 0 1.75rem 0;
 }
 
 /* ── Executive KPI cards ── */
@@ -406,20 +430,13 @@ html, body, [class*="css"] {
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 .exec-kpi-card:hover {
-    transform: translateY(-4px);
-    border-color: var(--synora-border-hover);
-    box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 40px rgba(34,211,238,0.06);
+    transform: translateY(-2px);
+    border-color: rgba(148, 163, 184, 0.22);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.22);
 }
 .exec-kpi-glow {
-    position: absolute;
-    top: -40%; right: -20%;
-    width: 160px; height: 160px;
-    background: radial-gradient(circle, rgba(34,211,238,0.12), transparent 70%);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.25s ease;
+    display: none;
 }
-.exec-kpi-card:hover .exec-kpi-glow { opacity: 1; }
 .exec-kpi-header {
     display: flex;
     align-items: center;
@@ -635,34 +652,41 @@ html, body, [class*="css"] {
 .stButton > button {
     border-radius: 999px !important;
     font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    padding: 0.7rem 1.75rem !important;
-    transition: all 0.22s ease !important;
+    font-size: 0.92rem !important;
+    padding: 0.85rem 2rem !important;
+    min-height: 3.1rem !important;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease !important;
     letter-spacing: 0.01em !important;
 }
 .stButton > button[kind="primary"],
 .stDownloadButton > button {
-    background: rgba(34, 211, 238, 0.08) !important;
-    color: var(--synora-cyan) !important;
-    border: 1.5px solid rgba(34, 211, 238, 0.55) !important;
-    box-shadow: 0 0 24px rgba(34, 211, 238, 0.12) !important;
+    background: transparent !important;
+    color: var(--synora-text) !important;
+    border: 1px solid rgba(248, 250, 252, 0.35) !important;
+    box-shadow: none !important;
 }
 .stButton > button[kind="primary"]:hover,
 .stDownloadButton > button:hover {
-    background: rgba(34, 211, 238, 0.16) !important;
-    border-color: var(--synora-cyan) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(248, 250, 252, 0.55) !important;
     color: var(--synora-text) !important;
-    box-shadow: 0 0 32px rgba(34, 211, 238, 0.25) !important;
-    transform: translateY(-1px);
+    transform: none;
 }
 .stButton > button[kind="secondary"] {
     background: transparent !important;
-    color: var(--synora-text) !important;
-    border: 1.5px solid rgba(248, 250, 252, 0.25) !important;
+    color: var(--synora-muted) !important;
+    border: 1px solid rgba(148, 163, 184, 0.22) !important;
 }
 .stButton > button[kind="secondary"]:hover {
-    background: rgba(255, 255, 255, 0.04) !important;
-    border-color: rgba(248, 250, 252, 0.45) !important;
+    background: rgba(255, 255, 255, 0.03) !important;
+    border-color: rgba(148, 163, 184, 0.35) !important;
+    color: var(--synora-text) !important;
+}
+.synora-hero-actions .stButton > button[kind="primary"] {
+    min-width: 220px !important;
+}
+.synora-hero-actions .stButton > button[kind="secondary"] {
+    min-width: 240px !important;
 }
 
 [data-testid="stFileUploader"] section {
@@ -2140,23 +2164,98 @@ def apply_pending_nav():
         st.session_state.nav_pending = None
 
 
-def _build_hero_stats_html(df: Optional[pd.DataFrame]) -> str:
+def _compute_operational_health(alerts: list) -> int:
+    """UI-only health score for the status strip."""
+    if not alerts:
+        return 92
+    critical = sum(1 for a in alerts if a.get("level") == "critical")
+    warning = len(alerts) - critical
+    return max(38, min(100, 92 - critical * 14 - warning * 7))
+
+
+def _extract_opportunity_display(df: pd.DataFrame, alerts: list) -> str:
+    """UI-only formatted opportunity from existing report logic."""
     if df is None:
-        return ""
-    avgs = df.mean(numeric_only=True)
-    alerts = len(st.session_state.alerts)
+        return "—"
+    report = generate_consultant_report(df, alerts)
+    match = re.search(r"\*\*Estimated Total Monthly Financial Exposure: (\$[^\*\n]+)\*\*", report)
+    if match:
+        return match.group(1).strip()
+    if alerts:
+        return "Under Review"
+    return "$0"
+
+
+def _build_status_strip_html() -> str:
+    df = st.session_state.df
+    alerts = st.session_state.alerts or []
+
+    if df is None:
+        return (
+            '<div class="synora-status-wrap">'
+            '<div class="synora-status-strip">'
+            '<div class="synora-status-item"><span class="synora-status-label">Operational Health</span>'
+            '<span class="synora-status-value is-muted">—</span></div>'
+            '<div class="synora-status-item"><span class="synora-status-label">Active Alerts</span>'
+            '<span class="synora-status-value is-muted">—</span></div>'
+            '<div class="synora-status-item"><span class="synora-status-label">Reporting Periods</span>'
+            '<span class="synora-status-value is-muted">—</span></div>'
+            '<div class="synora-status-item"><span class="synora-status-label">Financial Opportunity</span>'
+            '<span class="synora-status-value is-muted">—</span></div>'
+            '</div></div>'
+        )
+
+    health = _compute_operational_health(alerts)
+    opportunity = _extract_opportunity_display(df, alerts)
     return (
-        '<div class="synora-hero-stats">'
-        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{len(df)}</div>'
-        '<div class="synora-hero-stat-label">Reporting Periods</div></div>'
-        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{avgs.get("ED_Visits", 0):.0f}</div>'
-        '<div class="synora-hero-stat-label">Avg ED Visits</div></div>'
-        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{alerts}</div>'
-        '<div class="synora-hero-stat-label">Active Alerts</div></div>'
-        f'<div class="synora-hero-stat"><div class="synora-hero-stat-value">{avgs.get("Admission_Rate", 0):.1f}%</div>'
-        '<div class="synora-hero-stat-label">Admission Rate</div></div>'
-        '</div>'
+        '<div class="synora-status-wrap">'
+        '<div class="synora-status-live"><span class="synora-status-live-dot"></span>Live Intelligence</div>'
+        '<div class="synora-status-strip">'
+        f'<div class="synora-status-item"><span class="synora-status-label">Operational Health</span>'
+        f'<span class="synora-status-value">{health}/100</span></div>'
+        f'<div class="synora-status-item"><span class="synora-status-label">Active Alerts</span>'
+        f'<span class="synora-status-value">{len(alerts)}</span></div>'
+        f'<div class="synora-status-item"><span class="synora-status-label">Reporting Periods</span>'
+        f'<span class="synora-status-value">{len(df)}</span></div>'
+        f'<div class="synora-status-item"><span class="synora-status-label">Financial Opportunity</span>'
+        f'<span class="synora-status-value">{opportunity}</span></div>'
+        '</div></div>'
     )
+
+
+def render_landing_hero():
+    hero_html = (
+        '<div class="synora-hero-fullscreen">'
+        '<div class="synora-hero-inner">'
+        '<div class="synora-hero-brand">Synora</div>'
+        '<h1 class="synora-hero-headline">'
+        '<span>Executive Intelligence</span>'
+        '<span>For Healthcare Operations</span>'
+        '</h1>'
+        '<p class="synora-hero-statement">Transform operational complexity into executive clarity.</p>'
+        '<p class="synora-hero-desc">'
+        'AI-powered operational intelligence for hospitals, health systems, '
+        'and executive leadership teams.'
+        '</p>'
+        '</div></div>'
+    )
+    st.markdown(hero_html, unsafe_allow_html=True)
+
+
+def render_status_strip():
+    st.markdown(_build_status_strip_html(), unsafe_allow_html=True)
+
+
+def render_hero_ctas():
+    c1, c2, _ = st.columns([1.2, 1.35, 1.8])
+    with c1:
+        if st.button("Launch Mission Control", type="primary", use_container_width=True, key="hero_launch"):
+            st.session_state.show_platform = True
+            st.rerun()
+    with c2:
+        if st.button("Import Operational Data", type="secondary", use_container_width=True, key="hero_import"):
+            st.session_state.nav_pending = "Operational Intelligence"
+            st.rerun()
 
 
 def render_top_nav():
@@ -2176,42 +2275,15 @@ def render_top_nav():
     """, unsafe_allow_html=True)
 
 
-def render_landing_hero():
-    hero_html = (
-        '<div class="synora-hero-fullscreen">'
-        '<div class="synora-hero-inner">'
-        '<div class="synora-hero-eyebrow">Executive Intelligence for Healthcare Operations</div>'
-        '<h1 class="synora-hero-title">Synora</h1>'
-        '<p class="synora-hero-tagline">Transform operational complexity into executive clarity.</p>'
-        '<p class="synora-hero-subtitle">'
-        'AI-powered operational intelligence for hospitals, health systems, '
-        'and executive leadership teams.'
-        '</p>'
-        + _build_hero_stats_html(st.session_state.df)
-        + '</div></div>'
-    )
-    st.markdown(hero_html, unsafe_allow_html=True)
-
-
-def render_hero_ctas():
-    c1, c2, _ = st.columns([1.15, 1.35, 2.5])
-    with c1:
-        if st.button("Explore Platform", type="primary", use_container_width=True, key="hero_explore"):
-            st.session_state.show_platform = True
-            st.rerun()
-    with c2:
-        if st.button("Import Operational Data", type="secondary", use_container_width=True, key="hero_import"):
-            st.session_state.nav_pending = "Operational Intelligence"
-            st.rerun()
-
-
 def render_compact_hero():
     st.markdown("""
     <div class="synora-hero-compact">
         <div class="synora-hero-inner">
-            <div class="synora-hero-eyebrow">Synora</div>
-            <h1 class="synora-hero-title" style="font-size:2rem;">Executive Intelligence</h1>
-            <p class="synora-hero-subtitle" style="margin-bottom:0;">
+            <div class="synora-hero-brand">Synora</div>
+            <h1 class="synora-hero-headline" style="font-size:1.75rem;margin-bottom:1rem;">
+                <span>Executive Intelligence</span>
+            </h1>
+            <p class="synora-hero-desc" style="margin-bottom:0;">
                 Import operational data via Operational Intelligence to activate this module.
             </p>
         </div>
@@ -2418,6 +2490,7 @@ def render_financial_impact(df: pd.DataFrame, alerts: list[dict]):
 
 def render_page_overview():
     render_landing_hero()
+    render_status_strip()
     render_hero_ctas()
     df = st.session_state.df
     if df is not None:
